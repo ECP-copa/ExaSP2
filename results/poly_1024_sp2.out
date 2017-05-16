@@ -1,0 +1,113 @@
+Nodes =  2
+Threads =  16
+Reported: 2 (out of 2) daemons - 2 (out of 2) procs
+CoSP2: SP2 Loop
+
+Parameters:
+msparse = 256  hDim = 12288  debug = 1
+hmatName = data/hmatrix.1024.mtx
+eps = 1e-05  hEps = 1e-16
+idemTol = 1e-14
+
+hDim = 12288 M = 256
+Adjusted M = 256
+total procs = 2  total rows = 12288  total cols = 256
+global row min = 0  row max = 12288  row extent = 12288
+rank = 0 local row min = 0  row max = 6144  row extent = 6144
+
+Sparsity:
+Initial sparsity = 196608, fraction = 1.302083e-03, Avg per row = 16.000000
+Max per row = 19
+I = 13, count = 4096, fraction = 0.333333
+I = 17, count = 6144, fraction = 0.500000
+I = 19, count = 2048, fraction = 0.166667
+rank = 1 local row min = 6144  row max = 12288  row extent = 6144
+
+Gershgorin:
+New  eMax, eMin = 2.105089e+01, -4.763889e+01
+bufferSize = 25165824
+Initial sparsity normalized = 196608, fraction = 1.302083e-03,  avg = 16, max = 19
+
+SP2Loop:
+iter = 0  trX = 4.961454e+03  trX2 = 2.195115e+03
+iter = 1  trX = 7.727793e+03  trX2 = 5.102133e+03
+iter = 2  trX = 5.102133e+03  trX2 = 2.532775e+03
+iter = 3  trX = 7.671490e+03  trX2 = 5.273284e+03
+iter = 4  trX = 5.273284e+03  trX2 = 3.070394e+03
+iter = 5  trX = 7.476174e+03  trX2 = 5.439536e+03
+iter = 6  trX = 5.439536e+03  trX2 = 3.764416e+03
+iter = 7  trX = 7.114657e+03  trX2 = 5.614263e+03
+iter = 8  trX = 5.614263e+03  trX2 = 4.537190e+03
+iter = 9  trX = 6.691336e+03  trX2 = 5.842714e+03
+iter = 10  trX = 5.842714e+03  trX2 = 5.316883e+03
+iter = 11  trX = 6.368544e+03  trX2 = 6.040626e+03
+iter = 12  trX = 6.040626e+03  trX2 = 5.877397e+03
+iter = 13  trX = 6.203854e+03  trX2 = 6.127170e+03
+iter = 14  trX = 6.127170e+03  trX2 = 6.103502e+03
+iter = 15  trX = 6.150838e+03  trX2 = 6.143331e+03
+iter = 16  trX = 6.143331e+03  trX2 = 6.142536e+03
+iter = 17  trX = 6.144127e+03  trX2 = 6.143999e+03
+iter = 18  trX = 6.143999e+03  trX2 = 6.143997e+03
+iter = 19  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 20  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 21  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 22  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 23  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 24  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 25  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 26  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 27  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 28  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 29  trX = 6.144000e+03  trX2 = 6.144000e+03
+iter = 30  trX = 6.144000e+03  trX2 = 6.144000e+03
+
+Results:
+X2 Sparsity CCN = 1277952, fraction = 8.463542e-03 avg = 104, max = 119
+D Sparsity AAN = 1277952, fraction = 8.463542e-03 avg = 104, max = 119
+Number of iterations = 31
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+reduce                    35           0.0000            0.0005
+send                      31           8.0972          251.0147
+recv                      31           8.1021          251.1661
+
+Counter Statistics Across 2 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+reduce               0:      0.0005       0:      0.0005        0.0005        0.0000
+send                 0:    251.0147       1:    251.1661      251.0904        0.0757
+recv                 1:    251.0147       0:    251.1661      251.0904        0.0757
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1       0.6279        0.6279      100.00
+loop                       1       0.6279        0.6279      100.00
+  pre                      1       0.0993        0.0993       15.82
+    readh                  1       0.0844        0.0844       13.45
+  sp2Loop                  1       0.5221        0.5221       83.15
+    norm                   1       0.0004        0.0004        0.06
+    x2                    31       0.0059        0.1842       29.33
+    xadd                  14       0.0006        0.0082        1.30
+    xset                  17       0.0004        0.0072        1.15
+    exchange              62       0.0049        0.3045       48.49
+    reduceComm            35       0.0001        0.0027        0.43
+
+Timing Statistics Across 2 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                1:    0.6277       0:    0.6279      0.6278      0.0001
+loop                 1:    0.6277       0:    0.6279      0.6278      0.0001
+  pre                0:    0.0993       1:    0.0995      0.0994      0.0001
+    readh            1:    0.0844       0:    0.0844      0.0844      0.0000
+  sp2Loop            0:    0.5221       1:    0.5221      0.5221      0.0000
+    norm             1:    0.0004       0:    0.0004      0.0004      0.0000
+    x2               0:    0.1842       1:    0.1850      0.1846      0.0004
+    xadd             0:    0.0082       1:    0.0084      0.0083      0.0001
+    xset             0:    0.0072       1:    0.0076      0.0074      0.0002
+    exchange         0:    0.3045       1:    0.3051      0.3048      0.0003
+    reduceComm       1:    0.0007       0:    0.0027      0.0017      0.0010

@@ -1,0 +1,126 @@
+# Makefile for ExaSP2 serial and parallel versions
+#
+
+SHELL = /bin/bash
+
+# double precision (ON/OFF)
+DOUBLE_PRECISION = ON
+
+# parallel (MPI/NONE)
+PARALLEL = MPI
+
+# sp2solver (BASIC)
+SP2SOLVER = BASIC
+
+# decomposition (ROW)
+DECOMPOSITION = ROW
+
+# dataexchange (HALO)
+DATAEXCHANGE = HALO
+
+# matrix math (SPARSE)
+MATRIXMATH = SPARSE
+
+CC = gcc
+CFLAGS = -std=c99 -fopenmp
+OPTFLAGS = -O5
+INCLUDES =
+C_LIB = -lm
+
+MPI_LIB =
+MPI_INCLUDE =
+
+OTHER_LIB =
+OTHER_INCLUDE =
+
+# clear all suffixes
+.SUFFIXES:
+# list only those that we use
+.SUFFIXES: .c .o
+
+.PHONY: DEFAULT clean distclean depend
+
+BIN_DIR=../bin
+
+# Add parallel
+ifeq ($(PARALLEL), MPI)
+DO_MPI = ON
+CFLAGS += -DDO_MPI -DPARALLEL_MPI
+endif
+
+ifeq ($(PARALLEL), NONE)
+DO_MPI = OFF
+CFLAGS += -DPARALLEL_MPI
+endif
+
+# Add sp2solver
+ifeq ($(SP2SOLVER), BASIC)
+CFLAGS += -DSP2_BASIC
+endif
+
+# Add decomposition
+ifeq ($(DECOMPOSITION), ROW)
+CFLAGS += -DDECOMP_ROW
+endif
+
+# Add decomposition
+ifeq ($(DATAEXCHANGE), HALO)
+CFLAGS += -DDATAEX_HALO
+endif
+
+# Add matrixmath
+# Contiguous storage and no restriction on diag element position
+ifeq ($(MATRIXMATH), SPARSE)
+CFLAGS += -DMMATH_SPARSE -DCONTIG_MATRIX -DPOSJ
+endif
+
+# Check for double precision
+ifeq ($(DOUBLE_PRECISION), ON)
+CFLAGS += -DDOUBLE
+else
+CFLAGS += -DSINGLE
+endif
+
+# Set executable name and add includes & libraries for MPI if needed.
+ExaSP2_VARIANT = ExaSP2-serial
+ifeq ($(DO_MPI), ON)
+CC = mpicc
+ExaSP2_VARIANT = ExaSP2-parallel
+INCLUDES += ${MPI_INCLUDE}
+LDFLAGS += ${MPI_LIB}
+endif
+ExaSP2_EXE = ${BIN_DIR}/${ExaSP2_VARIANT}
+
+LDFLAGS += ${C_LIB} ${OTHER_LIB}
+CFLAGS  += ${OPTFLAGS} ${INCLUDES} ${OTHER_INCLUDE}
+
+SOURCES=$(wildcard *.c)
+OBJECTS=$(SOURCES:.c=.o)
+
+DEFAULT: ${ExaSP2_EXE}
+
+%.o: %.c
+	${CC} ${CFLAGS} -c $< -o $@
+
+${ExaSP2_EXE}: ${BIN_DIR} ${OBJECTS}
+	${CC} ${CFLAGS} -o ${ExaSP2_EXE} ${OBJECTS} ${LDFLAGS}
+
+${BIN_DIR}:
+	@if [ ! -d ${BIN_DIR} ]; then mkdir -p ${BIN_DIR} ; fi
+
+clean:
+	rm -f *.o .depend
+
+distclean:
+	rm -f ${ExaSP2_EXE} .depend.bak
+	rm -rf html latex
+
+.depend: ${SOURCES}
+	@touch .depend
+	@$(MAKE) --no-print-directory depend
+
+depend:
+	@echo "Rebuilding dependencies..."
+	@makedepend -f .depend -Y. --${CFLAGS}-- ${SOURCES} 2> /dev/null
+
+-include .depend
