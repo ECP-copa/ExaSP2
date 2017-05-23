@@ -1,0 +1,90 @@
+New implementations can be added for sp2Solver, dataExchange, decomposition,
+matrixMath, and parallel. The structures used in the routine calls are the
+high-level names. The implementations vary depending on the choice.
+
+Example for adding a new sp2Solver implementation called sp2New.
+All files added/changed are in src/.
+
+1. Add option to Makefile.vanilla.
+Define name for ifdef's. Specify options set.
+
+...
+# Add sp2solver
+ifeq ($(SP2SOLVER), BASIC)
+CFLAGS += -DSP2_BASIC
+endif
+
+ifeq ($(SP2SOLVER), NEW)
+CFLAGS += -DSP2_NEW
+endif
+...
+
+2. Add sp2New.h as include file in sp2Solver.h.
+
+/// \file
+/// SP2 loop functions.
+
+#ifndef __SP2SOLVER_H
+#define __SP2SOLVER_H
+
+#ifdef SP2_BASIC
+#include "sp2Basic.h"
+#endif
+
+#ifdef SP2_NEW
+#include "sp2New.h"
+#endif
+
+#endif
+
+3. Write sp2New.h and sp2New.c similar to sp2Basic.h and sp2Basic.c.
+Start from copies if that makes sense.
+
+4. in sp2New.h, add/modify structure elements and routines if needed.
+Change name in ifndef/define. If the API is changed, you may need to change
+the other SP2 solver implementations.
+
+/// \file
+/// SP2New loop functions.
+
+#ifndef __SP2NEW_H
+#define __SP2NEW_H
+
+#include <stdio.h>
+
+#include "decomposition.h"
+#include "matrixMath.h"
+#include "mytype.h"
+
+void sp2Loop(struct DataMatrixSt* xmatrix, struct DomainSt* domain);
+void reportResults(int iter, struct DataMatrixSt* xmatrix, struct DataMatrixSt* x2matrix, struct DomainSt* domain);
+
+#endif
+
+5. Add implementation code in sp2New.c.
+Make sure you use SP2_NEW in the ifdef.
+And include sp2New.h.
+
+/// \file
+/// SP2 loop.
+
+#ifdef SP2_NEW
+
+#include "sp2New.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "matrixMath.h"
+#include "dataExchange.h"
+#include "performance.h"
+#include "parallel.h"
+#include "constants.h"
+
+/// \details
+/// The second order spectral projection algorithm.
+void sp2Loop(struct DataMatrixSt* xmatrix, struct DomainSt* domain)
+{
+...
+
