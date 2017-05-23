@@ -1,5 +1,4 @@
-This is ExaSP2 version 1.0
-=========================
+# ExaSP2 
 
 ExaSP2 is a reference implementation of typical linear algebra
 algorithms and workloads for a quantum molecular dynamics (QMD)
@@ -16,8 +15,6 @@ to serve as a vehicle for co-design by allowing others to extend
 and/or reimplement as needed to test performance of new 
 architectures, programming models, etc.
 
-Copyright and license
-
 ExaSP2 is a composable and extensible framework for SP2 algorithms.
 A set of application programming interfaces (APIs) (under development) are 
 available for SP2 solvers, data decomposition, data exchange, matrix math, 
@@ -29,27 +26,40 @@ implementations for the SP2 solver (ex. BASIC), data decomposition (ex. ROW),
 data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
 (ex. MPI).
 
-Required: C
-Optional: MPI, BLAS library, other libraries
+# Compilation
 
-To build:
+## Dependencies
+ * Required: C
+ * Optional: MPI, BLAS library, other libraries (per implementation choices)
 
-cd src
+Build in the src directory.
+Copy and modify Makefile for the architecture and environment.
+```
 cp Makefile.vanilla Makefile
+```
 
-Modify the Makefile for the architecture and environment. 
-
-For default:
+Build default version.
+```
 make clean;make
+```
 
-For custom:
+Build custom version.
+```
 make clean;make SP2SOLVER=BASIC DECOMPOSITION=ROW, DATAEXCHANGE=HALO MATRIXMATH=SPARSE PARALLEL=MPI
+```
 
-To run default serial version: (generates random Hamiltonian)
+# Running
+
+Run the default serial version: (generates random Hamiltonian)
+```
 export OMP_NUM_THREADS=16; ./bin/ExaSP2-serial
-
-To run default parallel version: (generates random Hamiltonian)
+```
+Run the default parallel version: (generates random Hamiltonian)
+```
 export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel
+```
 
-To run parallel version with input arguments: (Hamiltonian from file)
+Run the parallel version with input arguments: (Hamiltonian from file)
+```
 export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel --hmatName ./data/hmatrix.1024.mtx --N 12288 --M 256
+```
