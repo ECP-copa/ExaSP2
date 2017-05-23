@@ -26,6 +26,33 @@ implementations for the SP2 solver (ex. BASIC), data decomposition (ex. ROW),
 data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
 (ex. MPI).
 
+# Current Capabilities
+
+## SP2 Solvers:
+ * BASIC    - zero temperature (default)
+ * FERMI    - finite temperature recursive truncated SP2 (future)
+ * RESPONSE - (future)
+ * KERNEL   - (future)
+ * CHEBYSHEV- Chebyshev polynomial (future)
+
+## Data Decomposition:
+ * ROW   - chunks of rows (default)
+ * GRAPH - graph-partitioned sub-matrices (future)
+
+## Data Exchange:
+ * HALO - exchange halo data (default)
+
+## Matrix Math: representations and operations
+ * SPARSE - only sparse (default)
+ * BML    - Basic Matrix Library (future)
+
+## Parallel Communication:
+ * NONE - serial (default)
+ * MPI  - parallel
+
+## Hamiltonian Matrix Input:
+ * In *.mtx format
+
 # Compilation
 
 ## Dependencies
