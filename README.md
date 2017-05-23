@@ -29,10 +29,10 @@ data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
 # Current Capabilities
 
 ## SP2 Solvers:
- * BASIC    - zero temperature (default)
- * FERMI    - finite temperature recursive truncated SP2 (future)
- * RESPONSE - (future)
- * KERNEL   - (future)
+ * BASIC    - original SP2 algorithm for calculation of the density matrix at zero temperature (default)
+ * FERMI    - truncated SP2 for finute temperature and partial occupation (future)
+ * RESPONSE - quantum perturbation theory for response properties at zero and finite temperature (future)
+ * KERNEL   - fast Newton solver for non-linear equations (future))
  * CHEBYSHEV- Chebyshev polynomial (future)
 
 ## Data Decomposition:
