@@ -7,7 +7,7 @@ SHELL = /bin/bash
 DOUBLE_PRECISION = ON
 
 # parallel (MPI/NONE)
-PARALLEL = MPI
+PARALLEL = NONE
 
 # sp2solver (BASIC)
 SP2SOLVER = BASIC
