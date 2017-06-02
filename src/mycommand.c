@@ -26,15 +26,19 @@
 /// | \--help       | -h          | N/A           | print this message
 /// | \--hmatName   | -f          |               | H matrix file name in Matrix Market format
 /// | \--N          | -n          | 1600          | number of rows
-/// | \--M          | -m          | 80            | max non-zeroes per row
+/// | \--M          | -m          | 1600 or N     | max non-zeroes per row
+/// | \--mtype      | -y          | 2 (ellpack)   | matrix type
+/// | \--minIter    | -w          | 25            | min sp2 iters
+/// | \--maxIter    | -x          | 100           | max sp2 iters
 /// | \--amp        | -a          | 1.0           | amplitude
 /// | \--alpha      | -l          | 1.0           | alpha
+/// | \--bndfil     | -b          | 0.5           | bndfil
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
 /// | \--heps       | -p          | 1.0E-16       | numeric threshold
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
 /// | \--gen        | -g          | 0             | generate H matrix if 1
-/// | \--dout       | -d          | 0             | write out density matrix if 1
-/// | \--dbg        | -b          | 0             | write debug messages if 1
+/// | \--dout       | -o          | 0             | write out density matrix if 1
+/// | \--dbg        | -d          | 0             | write debug messages if 1
 ///
 /// Notes: 
 /// 
@@ -92,15 +96,19 @@ Command parseCommandLine(int argc, char** argv)
 
    memset(cmd.hmatName, 0, 1024);
    cmd.N = 1600;
-   cmd.M = 80;
+   cmd.M = 1600;
+   cmd.mtype = 2;
    cmd.dout = 0;
    cmd.gen = 0;
+   cmd.minsp2iter = 25;
+   cmd.maxsp2iter = 100;
    cmd.debug = 0;
    cmd.amp = 1.0;
    cmd.alpha = 1.0;
    cmd.eps = 1.0E-05;
    cmd.heps= 1.0E-16;
    cmd.idemTol = 1.0E-14;
+   cmd.bndfil = 0.5;
 
    int help=0;
    // add arguments for processing.  Please update the html documentation too!
@@ -108,11 +116,15 @@ Command parseCommandLine(int argc, char** argv)
    addArg("hmatName",   'f', 1, 's',  cmd.hmatName,   sizeof(cmd.hmatName), "H matrix file name");
    addArg("N",          'n', 1, 'i',  &(cmd.N),            0,             "rows in matrix");
    addArg("M",          'm', 1, 'i',  &(cmd.M),            0,             "non-zeroes per row");
+   addArg("mtype",      'y', 1, 'i',  &(cmd.mtype),        0,             "matrix type (1-dense,2-ellpack)");
+   addArg("minIter",    'w', 1, 'i',  &(cmd.minsp2iter),   0,             "min sp2 iters");
+   addArg("maxIter",    'x', 1, 'i',  &(cmd.maxsp2iter),   0,             "max sp2 iters");
    addArg("gen",        'g', 1, 'i',  &(cmd.gen),          0,             "generate H matrix");
-   addArg("dout",       'd', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
-   addArg("debug",      'b', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
+   addArg("dout",       'o', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
+   addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
    addArg("amp",        'a', 1, 'd',  &(cmd.amp),          0,             "amplitude");
    addArg("alpha",      'l', 1, 'd',  &(cmd.alpha),        0,             "alpha");
+   addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
    addArg("eps",        'e', 1, 'd',  &(cmd.eps),          0,             "threshold for sparse math");
    addArg("heps",       'p', 1, 'd',  &(cmd.heps),         0,             "threshold for dense2sparse");
    addArg("idemtol",    'i', 1, 'd',  &(cmd.idemTol),      0,             "threshold for SP2 loop");

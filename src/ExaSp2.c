@@ -42,111 +42,128 @@
 
 #define MAIN_FILE
 
+#include "bml.h"
+
 #include <stdio.h>
 #include <omp.h>
 
-#include "decomposition.h"
-#include "matrixMath.h"
 #include "sp2Solver.h"
 #include "parallel.h"
 #include "performance.h"
 #include "mycommand.h"
 #include "constants.h"
 
-DataMatrix* initSimulation(Command cmd)
+/// \details
+/// Adjust number of non-zeroes
+int nnzStart(int hsize, int msize)
 {
-  DataMatrix* spH;
+  int M = msize;
+  if (M == 0) M = hsize;
+  if ((M % 32) > 0) M += (32 - (M % 32));
+  if (M > hsize) M = hsize;
+  if (bml_printRank()) printf("Adjusted M = %d\n", M);
+
+  return M;
+}
+
+/// \details
+/// Initialize h matrix
+bml_matrix_t* initSimulation(Command cmd)
+{
+  bml_matrix_t* h_bml;
+
+  bml_matrix_type_t matrix_type = cmd.mtype;
+  bml_matrix_precision_t precision = double_real;
+  bml_distribution_mode_t dmode = sequential;
 
   // Read in size of hamiltonian matrix and max number of non-zeroes
-  if (printRank()) printf("hDim = %d M = %d\n", hDim, msparse);
+  if (bml_printRank()) printf("N = %d M = %d\n", N_i, msparse_i);
+
+  // Calculate M - max number of non-zeroes per row
+  M_i = nnzStart(N_i, msparse_i);
 
   if (cmd.gen == 0)
   {
-    // Calculate M - max number of non-zeroes per row
-    M = nnzStart(hDim, msparse);
-  
-    // Allocate sparse input hamiltonian matrix
-    spH = initDataMatrix(SPARSE, hDim, M);
- 
-    // Read in hamiltonian matrix (in Matrix Market format)
+    // Allocate  input hamiltonian matrix
+    h_bml = bml_zero_matrix(matrix_type, precision, N_i, M_i, dmode);
     startTimer(readhTimer);
-    readMTX(cmd.hmatName, spH);
+    bml_read_bml_matrix(h_bml, cmd.hmatName);
     stopTimer(readhTimer);
-  
   }
 
   else
   {
-    // Calculate M - max number of non-zeroes per row
-    M = nnzStart(hDim, msparse);
-    
-    //Banded Hamiltonian is generated
-    spH = generateHMatrix(SPARSE, hDim, M, cmd.amp, cmd.alpha);
-
+    // Banded Hamiltonian is generated
+    h_bml = bml_banded_matrix(matrix_type, precision, N_i, M_i, dmode);
   }
 
-  return spH;
+  return h_bml;
 }
+
 
 int main(int argc, char** argv)
 {
   // Start
-  initParallel(&argc, &argv);
+  bml_init(&argc, &argv);
   profileStart(totalTimer);
   profileStart(loopTimer);
-  if (printRank()) printf("ExaSp2: SP2 Loop\n");
+  if (bml_printRank()) printf("ExaSp2: SP2 Loop\n");
 
   // Read in command line parameters
   Command cmd = parseCommandLine(argc, argv);
-  msparse = cmd.M;
-  hDim = cmd.N;
-  debug = cmd.debug;
-  eps = cmd.eps;
-  hEps = cmd.heps;
-  idemTol = cmd.idemTol;
-  if (printRank())
+  msparse_i = cmd.M;
+  N_i = cmd.N;
+  mtype_i = cmd.mtype;
+  minsp2iter_i = cmd.minsp2iter;
+  maxsp2iter_i = cmd.maxsp2iter;
+  debug_i = cmd.debug;
+  eps_i = cmd.eps;
+  hEps_i = cmd.heps;
+  idemTol_i = cmd.idemTol;
+  bndfil_i = cmd.bndfil;
+
+  if (bml_printRank())
   {
     printf("\nParameters:\n");
-    printf("msparse = %d  hDim = %d  debug = %d\n", msparse, hDim, debug);
-    printf("hmatName = %s\n", cmd.hmatName);
-    printf("eps = %lg  hEps = %lg\n", eps, hEps);
-    printf("idemTol = %lg\n\n", idemTol);
+    printf("msparse = %d  N = %d  debug = %d\n", msparse_i, N_i, debug_i);
+    printf("minsp2iter= %d  maxsp2iter = %d\n", minsp2iter_i, maxsp2iter_i);
+    printf("mtype = %d  hmatName = %s\n", cmd.mtype, cmd.hmatName);
+    printf("eps = %lg  hEps = %lg\n", eps_i, hEps_i);
+    printf("idemTol = %lg  bndfil = %lg\n\n", idemTol_i, bndfil_i);
   }
 
   // Initialize
   startTimer(preTimer);
-  DataMatrix* spH = initSimulation(cmd);
+  bml_matrix_t* h_bml = initSimulation(cmd);
+  printf("h type = %d\n", bml_get_type(h_bml));
+  bml_matrix_t* rho_bml = bml_zero_matrix(bml_get_type(h_bml), bml_get_precision(h_bml), N_i, M_i, bml_get_distribution_mode(h_bml));
+  printf("rho type = %d\n", bml_get_type(rho_bml));
   stopTimer(preTimer);
 
-  // Calculate domain decomposition
-  Domain* domain = initDecomposition(getNRanks(), spH->hsize, spH->msize);
+  // Determine sparsity - need to write
+  //bml_get_sparsity(h_bml);
   
-  // Determine sparsity
-  sparsity(spH);
-  
-  // Calculate gershgorin bounds for sparse matrix
-  gershgorin(spH, domain);
-
   // Perform SP2 loop
-  barrierParallel();
-  sp2Loop(spH, domain);
+  sp2Loop(h_bml, rho_bml, eps_i, bndfil_i, minsp2iter_i, maxsp2iter_i, idemTol_i);
 
   // Done
   profileStop(totalTimer);
   profileStop(loopTimer);
 
   /// Show timing results
-  printPerformanceResults(spH->hsize, 0);
+  printPerformanceResults(N_i, 0);
 
   /// Write out density matrix
-  if (printRank() && cmd.dout == 1)
-    writeMTX("dmatrix.out.mtx", spH);
+  if (bml_printRank() && cmd.dout == 1)
+  {
+    bml_write_bml_matrix(rho_bml, "dmatrix.out.mtx");
+  }
 
   /// Deallocate matrices, etc.
-  destroyDataMatrix(spH);
-  destroyDecomposition(domain);
+  bml_deallocate(&h_bml);
+  bml_deallocate(&rho_bml);
 
-  destroyParallel();
+  bml_shutdown();
 
   return 0;
 }
@@ -154,7 +171,7 @@ int main(int argc, char** argv)
 // --------------------------------------------------------------
 //
 //
-/// \page pg_building_comd Building ExaSP2
+/// \page pg_building_exasp2 Building ExaSP2
 ///
 /// ExaSP2 is written with portability in mind and should compile using
 /// practically any compiler that implements the C99 standard.  You will
@@ -324,7 +341,7 @@ int main(int argc, char** argv)
 /// ex. 1,2,4,8,16 MPI ranks.
 ///
 ///
-/// \page pg_cosp2_architecture ExaSP2 Architecture
+/// \page pg_exasp2_architecture ExaSP2 Architecture
 ///
 /// Program Flow
 /// ============

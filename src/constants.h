@@ -12,6 +12,7 @@
 #define MIN(A,B) ((A) < (B) ? (A) : (B))
 
 /// Numerical values used
+static const real_t MINUS_ONE = -1.0;
 static const real_t ZERO = 0.0;
 static const real_t TWO = 2.0;
 static const real_t THREE = 3.0;
@@ -20,23 +21,31 @@ static const real_t HALF = 0.5;
 static const int HUNDRED = 100;
 
 #ifdef MAIN_FILE
-int msparse;
-int hDim;
-int M;
-int debug;
+int msparse_i;
+int N_i;
+int M_i;
+int mtype_i;
+int minsp2iter_i;
+int maxsp2iter_i;
+int debug_i;
 
-real_t eps; 
-real_t hEps; 
-real_t idemTol; 
+real_t eps_i; 
+real_t hEps_i; 
+real_t idemTol_i; 
+real_t bndfil_i;
 #else
-extern int msparse;
-extern int hDim;
-extern int M;
-extern int debug;
+extern int msparse_i;
+extern int N_i;
+extern int M_i;
+extern int mtype_i;
+extern int minsp2iter_i;
+extern int maxsp2iter_i;
+extern int debug_i;
 
-extern real_t eps;          
-extern real_t hEps;           
-extern real_t idemTol;
+extern real_t eps_i;          
+extern real_t hEps_i;           
+extern real_t idemTol_i;
+extern real_t bndfil_i;
 #endif
 
 #endif

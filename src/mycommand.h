@@ -15,8 +15,11 @@ typedef struct CommandSt
    char hmatName[1024]; //!< name of the dense H matrix file
    int N;               //!< number of rows in H matrix (N x N)
    int M;               //!< max number of non-zeroes in H matrix row
+   int mtype;           //!< matrix type (0-dense, 1-ellpack, ...)
    int dout;            //!< if == 1, write out density matrix
    int gen;             //!< if == 1, generate sparse hamiltonian
+   int minsp2iter;      //!< minimum number of sp2 iterations
+   int maxsp2iter;      //!< maximum number of sp2 iterations
    int debug;           //!< if == 1, write out debug messages
 
    real_t amp;          //!< amplitude
@@ -25,6 +28,7 @@ typedef struct CommandSt
    real_t eps;          //!< threshold for sparse math 
    real_t heps;         //!< threshold for dense->sparse conversion
    real_t idemTol;      //!< threshold for SP2 loop
+   real_t bndfil;       //!< band fill
 } Command;
 
 /// Process command line arguments into an easy to handle structure.

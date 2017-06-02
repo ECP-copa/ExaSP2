@@ -3,6 +3,12 @@
 
 SHELL = /bin/bash
 
+# Use BML library (ON/OFF)
+BML = ON
+
+# Use METIS library for graph partitioning (ON/OFF)
+METIS = OFF
+
 # double precision (ON/OFF)
 DOUBLE_PRECISION = ON
 
@@ -18,8 +24,8 @@ DECOMPOSITION = ROW
 # dataexchange (HALO)
 DATAEXCHANGE = HALO
 
-# matrix math (SPARSE)
-MATRIXMATH = SPARSE
+# matrix math (SPARSE/BML)
+MATRIXMATH = BML
 
 CC = gcc
 CFLAGS = -std=c99 -fopenmp
@@ -53,6 +59,20 @@ DO_MPI = OFF
 CFLAGS += -DPARALLEL_MPI
 endif
 
+# Add BML
+ifeq ($(BML), ON)
+DO_BML = ON
+CFLAGS += -DDO_BML
+BML_PATH = $(HOME)/bml/bml/install/lib64
+endif
+
+# Add METIS
+ifeq ($(METIS), ON)
+DO_METIS = ON
+CFLAGS += -DDO_METIS
+METIS_PATH = $(HOME)/bml/bml/install/lib64
+endif
+
 # Add sp2solver
 ifeq ($(SP2SOLVER), BASIC)
 CFLAGS += -DSP2_BASIC
@@ -72,6 +92,8 @@ endif
 # Contiguous storage and no restriction on diag element position
 ifeq ($(MATRIXMATH), SPARSE)
 CFLAGS += -DMMATH_SPARSE -DCONTIG_MATRIX -DPOSJ
+else
+CFLAGS += -DMMATH_BML
 endif
 
 # Check for double precision
@@ -89,6 +111,18 @@ ExaSP2_VARIANT = ExaSP2-parallel
 INCLUDES += ${MPI_INCLUDE}
 LDFLAGS += ${MPI_LIB}
 endif
+
+# Add libraries and flags for BML and METIS
+ifeq ($(BML), ON)
+INCLUDES += -I$(BML_PATH)/../include
+LDFLAGS += -L$(BML_PATH) -lbml -lm -L/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
+endif
+
+ifeq ($(METIS), ON)
+INCLUDES += -I$(METIS_PATH)/include
+LDFLAGS += -L$(METIS_PATH)/lib -lmetis
+endif
+
 ExaSP2_EXE = ${BIN_DIR}/${ExaSP2_VARIANT}
 
 LDFLAGS += ${C_LIB} ${OTHER_LIB}
