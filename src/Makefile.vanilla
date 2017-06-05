@@ -6,6 +6,9 @@ SHELL = /bin/bash
 # Use BML library (ON/OFF)
 BML = ON
 
+# Choose BLAS library (MKL) 
+BLAS = MKL
+
 # Use METIS library for graph partitioning (ON/OFF)
 METIS = OFF
 
@@ -112,10 +115,15 @@ INCLUDES += ${MPI_INCLUDE}
 LDFLAGS += ${MPI_LIB}
 endif
 
-# Add libraries and flags for BML and METIS
+# Add libraries and flags for BML, BLAS, and METIS
 ifeq ($(BML), ON)
 INCLUDES += -I$(BML_PATH)/../include
-LDFLAGS += -L$(BML_PATH) -lbml -lm -L/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl
+LDFLAGS += -L$(BML_PATH) -lbml
+ifeq ($(BLAS), MKL)
+MKL_ROOT = $(MKLROOT)
+INCLUDES += -I$(MKL_ROOT)/include
+LDFLAGS += -L$(MKL_ROOT)/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -ldl
+endif
 endif
 
 ifeq ($(METIS), ON)
