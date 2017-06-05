@@ -135,9 +135,7 @@ int main(int argc, char** argv)
   // Initialize
   startTimer(preTimer);
   bml_matrix_t* h_bml = initSimulation(cmd);
-  printf("h type = %d\n", bml_get_type(h_bml));
   bml_matrix_t* rho_bml = bml_zero_matrix(bml_get_type(h_bml), bml_get_precision(h_bml), N_i, M_i, bml_get_distribution_mode(h_bml));
-  printf("rho type = %d\n", bml_get_type(rho_bml));
   stopTimer(preTimer);
 
   // Determine sparsity - need to write
