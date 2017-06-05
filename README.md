@@ -20,9 +20,8 @@ in the Basic Matrix Library (BML). It is a composable and extensible
 framework for SP2 algorithms. A set of application programming interfaces
 (APIs) (under development) are available for SP2 solvers, data decomposition
 (BML), data exchange (BML), matrix operations (BML), and parallel 
-communications. Default implementations are provided. New implementations can
-be added easily. New data structures, decompositions, and matrix operations
-are added to the BML.
+communications. New implementations can be added easily. New data structures, 
+decompositions, and matrix operations are added through the BML.
 
 At build time, one can compose an SP2 test program by choosing the 
 implementation for the SP2 solver (ex. BASIC) and parallel communication 
@@ -48,8 +47,8 @@ exchange (ex. HALO).
  * HALO - exchange halo data (future)
 
 ## Matrix Type: representations and operations
- * SPARSE - using BML format (default)
- * DENSE  - using BML format
+ * SPARSE - using BML ELLPACK format (default)
+ * DENSE  - using BML DENSE format
 
 ## Parallel Communication:
  * NONE - serial (default)
@@ -93,7 +92,7 @@ Run the default parallel version: (generates random sparse Hamiltonian)
 export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel
 ```
 
-Run the parallel version with input arguments: (Hamiltonian from file, sparse matrix)
+Run the parallel version with input arguments: (Hamiltonian from file, sparse matrix type)
 ```
 export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel --hmatName ./data/hmatrix.1024.mtx --mtype 2 --N 12288 --M 256
 ```
