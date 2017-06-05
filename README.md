@@ -15,16 +15,20 @@ to serve as a vehicle for co-design by allowing others to extend
 and/or reimplement as needed to test performance of new 
 architectures, programming models, etc.
 
-ExaSP2 is a composable and extensible framework for SP2 algorithms.
-A set of application programming interfaces (APIs) (under development) are 
-available for SP2 solvers, data decomposition, data exchange, matrix math, 
-and parallel communications. Default implementations are provided. New 
-implementations can be added easily.
+ExaSP2 has been written to use the data structures and matrix operations
+in the Basic Matrix Library (BML). It is a composable and extensible 
+framework for SP2 algorithms. A set of application programming interfaces
+(APIs) (under development) are available for SP2 solvers, data decomposition
+(BML), data exchange (BML), matrix operations (BML), and parallel 
+communications. Default implementations are provided. New implementations can
+be added easily. New data structures, decompositions, and matrix operations
+are added to the BML.
 
 At build time, one can compose an SP2 test program by choosing the 
-implementations for the SP2 solver (ex. BASIC), data decomposition (ex. ROW),
-data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
-(ex. MPI).
+implementation for the SP2 solver (ex. BASIC) and parallel communication 
+(ex. MPI). At run time choices can be made as input parameters for the matrix
+type (ex. dense, sparse), data decomposition (ex. 1-D, 2-D, GRAPH), and data 
+exchange (ex. HALO).
 
 # Current Capabilities
 
@@ -36,15 +40,16 @@ data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
  * CHEBYSHEV- Chebyshev polynomial (future)
 
 ## Data Decomposition:
- * ROW   - chunks of rows (default)
+ * 1-D   - chunks of rows/columns (default)
+ * 2-D   - blocks (future)
  * GRAPH - graph-partitioned sub-matrices (future)
 
 ## Data Exchange:
- * HALO - exchange halo data (default)
+ * HALO - exchange halo data (future)
 
-## Matrix Math: representations and operations
- * SPARSE - only sparse (default)
- * BML    - Basic Matrix Library (future)
+## Matrix Type: representations and operations
+ * SPARSE - using BML format (default)
+ * DENSE  - using BML format
 
 ## Parallel Communication:
  * NONE - serial (default)
@@ -57,7 +62,9 @@ data exchange (ex. HALO), matrix math (ex. SPARSE), and parallel communication
 
 ## Dependencies
  * Required: C
- * Optional: MPI, BLAS library, other libraries (per implementation choices)
+ * Required: BML (https:/github.com/qmmd/bml)
+ * Required: BLAS/LAPACK (ex. MKL)
+ * Optional: MPI, other libraries (per implementation choices)
 
 Build in the src directory.
 Copy and modify Makefile for the architecture and environment.
@@ -72,21 +79,21 @@ make clean;make
 
 Build custom version.
 ```
-make clean;make SP2SOLVER=BASIC DECOMPOSITION=ROW, DATAEXCHANGE=HALO MATRIXMATH=SPARSE PARALLEL=MPI
+make clean;make SP2SOLVER=BASIC PARALLEL=MPI
 ```
 
 # Running
 
-Run the default serial version: (generates random Hamiltonian)
+Run the default serial version: (generates random sparse Hamiltonian)
 ```
 export OMP_NUM_THREADS=16; ./bin/ExaSP2-serial
 ```
-Run the default parallel version: (generates random Hamiltonian)
+Run the default parallel version: (generates random sparse Hamiltonian)
 ```
 export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel
 ```
 
-Run the parallel version with input arguments: (Hamiltonian from file)
+Run the parallel version with input arguments: (Hamiltonian from file, sparse matrix)
 ```
-export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel --hmatName ./data/hmatrix.1024.mtx --N 12288 --M 256
+export OMP_NUM_THREADS=16; mpirun -np 16 --map-by node -x OMP_NUM_THREADS ./bin/ExaSP2-parallel --hmatName ./data/hmatrix.1024.mtx --mtype 2 --N 12288 --M 256
 ```
