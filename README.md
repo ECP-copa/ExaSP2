@@ -33,7 +33,7 @@ exchange (ex. HALO).
 
 ## SP2 Solvers:
  * BASIC    - original SP2 algorithm for calculation of the density matrix at zero temperature (default)
- * FERMI    - truncated SP2 for finute temperature and partial occupation (future)
+ * FERMI    - truncated SP2 for finite temperature and partial occupation (future)
  * RESPONSE - quantum perturbation theory for response properties at zero and finite temperature (future)
  * KERNEL   - fast Newton solver for non-linear equations (future))
  * CHEBYSHEV- Chebyshev polynomial (future)
