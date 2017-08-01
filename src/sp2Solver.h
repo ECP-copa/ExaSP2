@@ -8,4 +8,8 @@
 #include "sp2Basic.h"
 #endif
 
+#ifdef SP2_FERMI
+#include "sp2Fermi.h"
+#endif
+
 #endif

@@ -55,7 +55,8 @@
 
 /// \details
 /// Adjust number of non-zeroes
-int nnzStart(int hsize, int msize)
+int nnzStart(const int hsize, 
+             const int msize)
 {
   int M = msize;
   if (M == 0) M = hsize;
@@ -68,7 +69,7 @@ int nnzStart(int hsize, int msize)
 
 /// \details
 /// Initialize h matrix
-bml_matrix_t* initSimulation(Command cmd)
+bml_matrix_t* initSimulation(const Command cmd)
 {
   bml_matrix_t* h_bml;
 
@@ -101,7 +102,8 @@ bml_matrix_t* initSimulation(Command cmd)
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, 
+         char** argv)
 {
   // Start
   bml_init(&argc, &argv);
@@ -116,34 +118,74 @@ int main(int argc, char** argv)
   mtype_i = cmd.mtype;
   minsp2iter_i = cmd.minsp2iter;
   maxsp2iter_i = cmd.maxsp2iter;
+  nsteps_i = cmd.nsteps;
   debug_i = cmd.debug;
+
   eps_i = cmd.eps;
-  hEps_i = cmd.heps;
   idemTol_i = cmd.idemTol;
   bndfil_i = cmd.bndfil;
+  tscale_i = cmd.tscale;
+  occLimit_i = cmd.occLimit;
+  traceLimit_i = cmd.traceLimit;
 
   if (bml_printRank())
   {
     printf("\nParameters:\n");
     printf("msparse = %d  N = %d  debug = %d\n", msparse_i, N_i, debug_i);
-    printf("minsp2iter= %d  maxsp2iter = %d\n", minsp2iter_i, maxsp2iter_i);
+    printf("minsp2iter = %d  maxsp2iter = %d\n", minsp2iter_i, maxsp2iter_i);
+    printf("nsteps = %d  osteps = %d\n", nsteps_i, osteps_i);
     printf("mtype = %d  hmatName = %s\n", cmd.mtype, cmd.hmatName);
-    printf("eps = %lg  hEps = %lg\n", eps_i, hEps_i);
-    printf("idemTol = %lg  bndfil = %lg\n\n", idemTol_i, bndfil_i);
+    printf("eps = %lg  tscale = %lg\n", eps_i, tscale_i);
+    printf("idemTol = %lg  bndfil = %lg\n", idemTol_i, bndfil_i);
+    printf("occLimit = %lg  traceLimit = %lg\n\n", occLimit_i, traceLimit_i);
   }
 
   // Initialize
   startTimer(preTimer);
   bml_matrix_t* h_bml = initSimulation(cmd);
-  bml_matrix_t* rho_bml = bml_zero_matrix(bml_get_type(h_bml), bml_get_precision(h_bml), N_i, M_i, bml_get_distribution_mode(h_bml));
+  bml_matrix_type_t matrix_type = bml_get_type(h_bml);
+  bml_matrix_precision_t precision = bml_get_precision(h_bml);
+  bml_distribution_mode_t dmode = bml_get_distribution_mode(h_bml);
+  bml_matrix_t* rho_bml = bml_zero_matrix(matrix_type, precision, N_i, M_i, dmode);
   stopTimer(preTimer);
 
-  // Determine sparsity - need to write
-  //bml_get_sparsity(h_bml);
+  // Run SP2 variant
   
-  // Perform SP2 loop
-  sp2Loop(h_bml, rho_bml, eps_i, bndfil_i, minsp2iter_i, maxsp2iter_i, idemTol_i);
+  real_t nocc = bndfil_i * N_i;
 
+#ifdef SP2_BASIC
+  // Perform SP2 loop
+  sp2Loop(h_bml, rho_bml, nocc, minsp2iter_i, maxsp2iter_i, idemTol_i, eps_i);
+#endif
+
+#ifdef SP2_FERMI
+  real_t mu = ZERO;
+  real_t beta = ZERO;
+  int* sgnlist = bml_allocate_memory(nsteps_i*sizeof(int));
+  real_t h1 = ZERO;
+  real_t hN = ZERO;
+  real_t kbt = ZERO;
+
+  // Perform truncated SP2 Fermi initialization followed by Fermi
+  printf("sp2Init start: mu = %lg beta = %lg kbt = %lg\n", mu, beta, kbt);
+  startTimer(sp2InitTimer);
+  sp2Init(h_bml, rho_bml, nsteps_i, nocc, &mu, &beta, sgnlist, &h1, &hN,
+    tscale_i, occLimit_i, traceLimit_i, eps_i); 
+  stopTimer(sp2InitTimer);
+  
+  kbt = ABS(ONE / beta);
+  printf("sp2Init complete: mu = %lg beta = %lg kbt = %lg\n", mu, beta, kbt);
+
+  startTimer(sp2LoopTimer);
+  sp2Loop(h_bml, rho_bml, nsteps_i, nocc, &mu, beta, sgnlist, h1, hN,
+    osteps_i, eps_i, traceLimit_i, eps_i);
+  stopTimer(sp2LoopTimer);
+
+  printf("sp2Loop complete: mu = %lg\n", mu);
+
+  bml_free_memory(sgnlist);
+
+#endif
   // Done
   profileStop(totalTimer);
   profileStop(loopTimer);

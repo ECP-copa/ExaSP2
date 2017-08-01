@@ -37,7 +37,13 @@ void normalize(bml_matrix_t* h_bml)
 
 /// \details
 /// The second order spectral projection algorithm.
-void sp2Loop(bml_matrix_t* h_bml, bml_matrix_t* rho_bml, real_t threshold, real_t bndfil, int minsp2iter, int maxsp2iter, real_t idemTol)
+void sp2Loop(const bml_matrix_t* h_bml, 
+             bml_matrix_t* rho_bml, 
+             const real_t nocc,
+             const int minsp2iter, 
+             const int maxsp2iter, 
+             const real_t idemTol, 
+             const real_t threshold)
 {
   //DataExchange* dataExchange;
 
@@ -59,8 +65,6 @@ void sp2Loop(bml_matrix_t* h_bml, bml_matrix_t* rho_bml, real_t threshold, real_
   real_t idempErr = ZERO;
   real_t idempErr1 = ZERO;
   real_t idempErr2 = ZERO;
-
-  real_t occ = N_i*bndfil;
 
   real_t trX = ZERO;
   real_t trX2 = ZERO;
@@ -114,7 +118,7 @@ void sp2Loop(bml_matrix_t* h_bml, bml_matrix_t* rho_bml, real_t threshold, real_
  
     tr2XX2 = TWO*trX - trX2;
     trXOLD = trX;
-    limDiff = ABS(trX2 - occ) - ABS(tr2XX2 - occ);
+    limDiff = ABS(trX2 - nocc) - ABS(tr2XX2 - nocc);
 
     if (limDiff > idemTol) 
     {
@@ -182,7 +186,9 @@ void sp2Loop(bml_matrix_t* h_bml, bml_matrix_t* rho_bml, real_t threshold, real_
 
 /// \details
 /// Report density matrix results
-void reportResults(int iter, bml_matrix_t* rho_bml, bml_matrix_t* x2_bml)
+void reportResults(const int iter, 
+                   const bml_matrix_t* rho_bml, 
+                   const bml_matrix_t* x2_bml)
 {
     int sumIIA = 0;
     int sumIIC = 0;

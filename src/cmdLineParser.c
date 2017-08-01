@@ -82,7 +82,8 @@ static MyOption* lastOption(MyOption* o)
    return o;
 }
 
-static MyOption* findOption(MyOption* o, unsigned char shortArg)
+static MyOption* findOption(MyOption* o, 
+                            unsigned char shortArg)
 {
    while(o)
    {
@@ -93,8 +94,12 @@ static MyOption* findOption(MyOption* o, unsigned char shortArg)
 }
 
 
-int addArg(const char* longOption, const char shortOption,
-           int has_arg, const char type, void* dataPtr, int dataSize,
+int addArg(const char* longOption, 
+           const char shortOption,
+           int has_arg, 
+           const char type, 
+           void* dataPtr, 
+           int dataSize,
            const char* help)
 {
    MyOption* o;
@@ -141,7 +146,8 @@ void printArgs()
    return;
 }
 
-void processArgs(int argc, char** argv)
+void processArgs(int argc, 
+                 char** argv)
 {
    MyOption* o;
    int n=0;

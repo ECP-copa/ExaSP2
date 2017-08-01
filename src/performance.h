@@ -12,9 +12,14 @@ enum TimerHandle{
    preTimer,
    readhTimer,
    dense2sparseTimer,
+   sp2InitTimer, 
+   x2InitTimer,
+   mmInitTimer,
+   xaddInitTimer,
    sp2LoopTimer, 
    normTimer,
    x2Timer,
+   mmTimer,
    xaddTimer,
    xsetTimer,
    exchangeTimer,
@@ -98,6 +103,7 @@ enum CounterHandle {
 #endif
 
 /// Add number and size to counter
-void addToCounter(const enum CounterHandle handle, int size);
+void addToCounter(const enum CounterHandle handle, 
+                  const int size);
 
 #endif

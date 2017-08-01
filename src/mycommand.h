@@ -21,17 +21,19 @@ typedef struct CommandSt
    int minsp2iter;      //!< minimum number of sp2 iterations
    int maxsp2iter;      //!< maximum number of sp2 iterations
    int debug;           //!< if == 1, write out debug messages
-
-   real_t amp;          //!< amplitude
-   real_t alpha;        //!< alpha
+   int nsteps;          //!< number of SP2 steps
+   int osteps;          //!< number of occupation loop steps
 
    real_t eps;          //!< threshold for sparse math 
-   real_t heps;         //!< threshold for dense->sparse conversion
    real_t idemTol;      //!< threshold for SP2 loop
    real_t bndfil;       //!< band fill
+   real_t tscale;       //!< scaling factor for SP2_Fermi
+   real_t occLimit;     //!< occupation error limit
+   real_t traceLimit;   //!< trace comparison limit
 } Command;
 
 /// Process command line arguments into an easy to handle structure.
-Command parseCommandLine(int argc, char** argv);
+Command parseCommandLine(int argc, 
+                         char** argv);
 
 #endif

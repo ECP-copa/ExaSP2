@@ -68,7 +68,8 @@ void timestampBarrier(const char* msg)
    fflush(screenOut);
 }
 
-void initParallel(int* argc, char*** argv)
+void initParallel(int* argc, 
+                  char*** argv)
 {
 #ifdef DO_MPI
    MPI_Init(argc, argv);
@@ -119,8 +120,12 @@ void barrierParallel()
 /// \param [in]  recvLen Maximum number of bytes to receive.
 /// \param [in]  source  Rank in MPI_COMM_WORLD from which to receive.
 /// \return Number of bytes received.
-int sendReceiveParallel(void* sendBuf, int sendLen, int dest,
-                        void* recvBuf, int recvLen, int source)
+int sendReceiveParallel(const void* sendBuf, 
+                        const int sendLen, 
+                        const int dest,
+                        void* recvBuf,
+                        const int recvLen, 
+                        const int source)
 {
 #ifdef DO_MPI
    int bytesReceived;
@@ -144,7 +149,9 @@ int sendReceiveParallel(void* sendBuf, int sendLen, int dest,
 /// \param [in]  sendBuf Data to send.
 /// \param [in]  sendLen Number of bytes to send.
 /// \param [in]  dest    Rank in MPI_COMM_WORLD where data will be sent.
-int isendParallel(void* sendBuf, int sendLen, int dest)
+int isendParallel(const void* sendBuf, 
+                  const int sendLen, 
+                  const int dest)
 {
 #ifdef DO_MPI
   MPI_Request request;
@@ -165,7 +172,9 @@ int isendParallel(void* sendBuf, int sendLen, int dest)
 /// \param [in]  sendBuf Data to send.
 /// \param [in]  sendLen Number of bytes to send.
 /// \param [in]  dest    Rank in MPI_COMM_WORLD where data will be sent.
-int sendParallel(void* sendBuf, int sendLen, int dest)
+int sendParallel(const void* sendBuf, 
+                 const int sendLen, 
+                 const int dest)
 {
 #ifdef DO_MPI
   MPI_Send(sendBuf, sendLen, MPI_BYTE,
@@ -181,7 +190,8 @@ int sendParallel(void* sendBuf, int sendLen, int dest)
 /// Receive from any processor.
 /// \param [out] recvBuf Received data.
 /// \param [in]  recvLen Maximum number of bytes to receive.
-int recvAnyParallel(void* recvBuf, int recvLen)
+int recvAnyParallel(void* recvBuf, 
+                    const int recvLen)
 {
 #ifdef DO_MPI
   int bytesReceived;
@@ -202,7 +212,8 @@ int recvAnyParallel(void* recvBuf, int recvLen)
 /// Receive from any processor.
 /// \param [out] recvBuf Received data.
 /// \param [in]  recvLen Maximum number of bytes to receive.
-int irecvAnyParallel(void* recvBuf, int recvLen)
+int irecvAnyParallel(void* recvBuf, 
+                     const int recvLen)
 {
 #ifdef DO_MPI
   MPI_Request request;
@@ -287,7 +298,9 @@ int testIsend(int rind)
 /// \param [out] recvBuf Received data.
 /// \param [in]  recvLen Maximum number of bytes to receive.
 /// \param [in]  src MPI rank message source
-int recvParallel(void* recvBuf, int recvLen, int source)
+int recvParallel(void* recvBuf, 
+                 const int recvLen, 
+                 const int source)
 {
 #ifdef DO_MPI
   int bytesReceived;
@@ -304,7 +317,9 @@ int recvParallel(void* recvBuf, int recvLen, int source)
 #endif
 }
 
-int irecvParallel(void* recvBuf, int recvLen, int source)
+int irecvParallel(void* recvBuf, 
+                  const int recvLen, 
+                  const int source)
 {
 #ifdef DO_MPI
   int bytesReceived;
@@ -319,7 +334,9 @@ int irecvParallel(void* recvBuf, int recvLen, int source)
 #endif
 }
 
-void addIntParallel(int* sendBuf, int* recvBuf, int count)
+void addIntParallel(const int* sendBuf, 
+                    int* recvBuf,
+                    const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
@@ -329,7 +346,9 @@ void addIntParallel(int* sendBuf, int* recvBuf, int count)
 #endif
 }
 
-void addRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
+void addRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, REAL_MPI_TYPE, MPI_SUM, MPI_COMM_WORLD);
@@ -339,7 +358,9 @@ void addRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
 #endif
 }
 
-void addDoubleParallel(double* sendBuf, double* recvBuf, int count)
+void addDoubleParallel(const double* sendBuf, 
+                       double* recvBuf,
+                       const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
@@ -349,7 +370,9 @@ void addDoubleParallel(double* sendBuf, double* recvBuf, int count)
 #endif
 }
 
-void maxIntParallel(int* sendBuf, int* recvBuf, int count)
+void maxIntParallel(const int* sendBuf, 
+                    int* recvBuf, 
+                    const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, MPI_INT, MPI_MAX, MPI_COMM_WORLD);
@@ -359,7 +382,9 @@ void maxIntParallel(int* sendBuf, int* recvBuf, int count)
 #endif
 }
 
-void maxRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
+void maxRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, REAL_MPI_TYPE, MPI_MAX, MPI_COMM_WORLD);
@@ -369,7 +394,9 @@ void maxRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
 #endif
 }
 
-void minRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
+void minRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, REAL_MPI_TYPE, MPI_MIN, MPI_COMM_WORLD);
@@ -379,7 +406,9 @@ void minRealParallel(real_t* sendBuf, real_t* recvBuf, int count)
 #endif
 }
 
-void minRankDoubleParallel(RankReduceData* sendBuf, RankReduceData* recvBuf, int count)
+void minRankDoubleParallel(const RankReduceData* sendBuf, 
+                           RankReduceData* recvBuf,
+                           const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, MPI_DOUBLE_INT, MPI_MINLOC, MPI_COMM_WORLD);
@@ -392,7 +421,9 @@ void minRankDoubleParallel(RankReduceData* sendBuf, RankReduceData* recvBuf, int
 #endif
 }
 
-void maxRankDoubleParallel(RankReduceData* sendBuf, RankReduceData* recvBuf, int count)
+void maxRankDoubleParallel(const RankReduceData* sendBuf, 
+                           RankReduceData* recvBuf,
+                           const int count)
 {
 #ifdef DO_MPI
    MPI_Allreduce(sendBuf, recvBuf, count, MPI_DOUBLE_INT, MPI_MAXLOC, MPI_COMM_WORLD);
@@ -427,7 +458,8 @@ void maxRealReduce(real_t* value)
    *value = sGlobal[0];
 }
 
-void maxIntReduce2(int* value0, int* value1)
+void maxIntReduce2(int* value0, 
+                   int* value1)
 {
    int sLocal[2], sGlobal[2];
 
@@ -440,7 +472,8 @@ void maxIntReduce2(int* value0, int* value1)
    *value1 = sGlobal[1];
 }
 
-void addIntReduce2(int* value0, int* value1)
+void addIntReduce2(int* value0, 
+                   int* value1)
 {
    int sLocal[2], sGlobal[2];
 
@@ -453,7 +486,8 @@ void addIntReduce2(int* value0, int* value1)
    *value1 = sGlobal[1];
 }
 
-void addRealReduce2(real_t* value0, real_t* value1)
+void addRealReduce2(real_t* value0, 
+                    real_t* value1)
 {
    real_t sLocal[2], sGlobal[2];
 
@@ -467,7 +501,9 @@ void addRealReduce2(real_t* value0, real_t* value1)
 }
 
 /// \param [in] count Length of buf in bytes.
-void bcastParallel(void* buf, int count, int root)
+void bcastParallel(const void* buf, 
+                   const int count, 
+                   const int root)
 {
 #ifdef DO_MPI
    MPI_Bcast(buf, count, MPI_BYTE, root, MPI_COMM_WORLD);

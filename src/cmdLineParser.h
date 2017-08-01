@@ -30,7 +30,8 @@ int addArg(const char *longOption, const char shortOption,
            const char *help);
 
 /// Call this to process your arguments.
-void processArgs(int argc, char **argv);
+void processArgs(int argc, 
+                 char **argv);
 
 /// Prints the arguments to the stdout stream.
 void printArgs(void);

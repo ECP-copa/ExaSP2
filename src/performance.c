@@ -52,9 +52,14 @@ char* timerName[numberOfTimers] = {
    "  pre",
    "    readh",
    "    sparse",
+   "  sp2Init",
+   "    x2I",
+   "    mmI",
+   "    xaddI",
    "  sp2Loop",
    "    norm",
    "    x2",
+   "    mm",
    "    xadd",
    "    xset",
    "    exchange",
@@ -146,7 +151,8 @@ double getElapsedTime(const enum TimerHandle handle)
 /// The report contains two blocks each for timers and counters.
 /// The upper block for each is performance information for the printRank.  
 /// The lower block is statistical information over all ranks.
-void printPerformanceResults(int nGlobalAtoms, int printRate)
+void printPerformanceResults(const int nGlobalAtoms, 
+                             const int printRate)
 {
    // Collect timer statistics overall and across ranks
    performanceStats();
@@ -450,7 +456,8 @@ void performanceStats(void)
 
 /// \ details
 /// Add to a counter.
-void addToCounter(const enum CounterHandle handle, int size)
+void addToCounter(const enum CounterHandle handle, 
+                  const int size)
 {
    perfCounter[handle].count += 1;
    perfCounter[handle].total += size;

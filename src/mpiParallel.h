@@ -26,7 +26,8 @@ int printRank(void);
 void timestampBarrier(const char* msg);
 
 /// Wrapper for MPI_Init.
-void initParallel(int *argc, char ***argv);
+void initParallel(int *argc, 
+                  char ***argv);
 
 /// Wrapper for MPI_Finalize.
 void destroyParallel(void);
@@ -35,25 +36,40 @@ void destroyParallel(void);
 void barrierParallel(void);
 
 /// Wrapper for MPI_Sendrecv.
-int sendReceiveParallel(void* sendBuf, int sendLen, int dest,
-                        void* recvBuf, int recvLen, int source);
+int sendReceiveParallel(const void* sendBuf, 
+                        const int sendLen, 
+                        const int dest,
+                        void* recvBuf, 
+                        const int recvLen, 
+                        const int source);
+
 /// Wrapper for MPI_Send.
-int sendParallel(void* sendBuf, int sendLen, int dest);
+int sendParallel(const void* sendBuf, 
+                 const int sendLen, 
+                 const int dest);
 
 /// Wrapper for MPI_Isend, non-blocking send.
-int isendParallel(void* sendBuf, int sendLen, int dest);
+int isendParallel(const void* sendBuf, 
+                  const int sendLen, 
+                  const int dest);
 
 /// Wrapper for MPI_Recv from any processor.
-int recvAnyParallel(void* recvBuf, int recvLen);
+int recvAnyParallel(void* recvBuf, 
+                    const int recvLen);
 
 /// Wrapper for MPI_Irecv from any processor, non-blocking receive.
-int irecvAnyParallel(void* recvBuf, int recvLen);
+int irecvAnyParallel(void* recvBuf, 
+                     const int recvLen);
 
 /// Wrapper for MPI_Recv.
-int recvParallel(void* recvBuf, int recvLen, int source);
+int recvParallel(void* recvBuf, 
+                 const int recvLen,
+                 const int source);
 
 /// Wrapper for MPI_Recv, non-blocking receive.
-int irecvParallel(void* recvBuf, int recvLen, int source);
+int irecvParallel(void* recvBuf, 
+                  const int recvLen, 
+                  const int source);
 
 /// Wrapper for MPI_Wait on non-blocking receive.
 int waitIrecv(int rind);
@@ -68,36 +84,57 @@ int testIrecv(int rind);
 int testIsend(int rind);
 
 /// Wrapper for MPI_Allreduce integer sum.
-void addIntReduce2(int* value0, int* value1);
-void addIntParallel(int* sendBuf, int* recvBuf, int count);
+void addIntReduce2(int* value0, 
+                   int* value1);
+void addIntParallel(const int* sendBuf, 
+                    int* recvBuf, 
+                    const int count);
 
 /// Wrapper for MPI_Allreduce real sum.
-void addRealReduce2(real_t* value0, real_t* value1);
-void addRealParallel(real_t* sendBuf, real_t* recvBuf, int count);
+void addRealReduce2(real_t* value0, 
+                    real_t* value1);
+void addRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count);
 
 /// Wrapper for MPI_Allreduce double sum.
-void addDoubleParallel(double* sendBuf, double* recvBuf, int count);
+void addDoubleParallel(const double* sendBuf, 
+                       double* recvBuf, 
+                       const int count);
 
 /// Wrapper for MPI_Allreduce real min.
 void minRealReduce(real_t* value);
-void minRealParallel(real_t* sendBuf, real_t* recvBuf, int count);
+void minRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count);
 
 /// Wrapper for MPI_Allreduce integer max.
-void maxIntReduce2(int* value0, int* value1);
-void maxIntParallel(int* sendBuf, int* recvBuf, int count);
+void maxIntReduce2(int* value0, 
+                   int* value1);
+void maxIntParallel(const int* sendBuf, 
+                    int* recvBuf, 
+                    const int count);
 
 /// Wrapper for MPI_Allreduce real max.
 void maxRealReduce(real_t* value);
-void maxRealParallel(real_t* sendBuf, real_t* recvBuf, int count);
+void maxRealParallel(const real_t* sendBuf, 
+                     real_t* recvBuf, 
+                     const int count);
 
 /// Wrapper for MPI_Allreduce double min with rank.
-void minRankDoubleParallel(RankReduceData* sendBuf, RankReduceData* recvBuf, int count);
+void minRankDoubleParallel(const RankReduceData* sendBuf, 
+                           RankReduceData* recvBuf, 
+                           const int count);
 
 /// Wrapper for MPI_Allreduce double max with rank.
-void maxRankDoubleParallel(RankReduceData* sendBuf, RankReduceData* recvBuf, int count);
+void maxRankDoubleParallel(const RankReduceData* sendBuf, 
+                           RankReduceData* recvBuf, 
+                           const int count);
 
 /// Wrapper for MPI_Bcast
-void bcastParallel(void* buf, int len, int root);
+void bcastParallel(const void* buf, 
+                   const int len, 
+                   const int root);
 
 ///  Return non-zero if code was built with MPI active.
 int builtWithMpi(void);

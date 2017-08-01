@@ -30,11 +30,8 @@
 /// | \--mtype      | -y          | 2 (ellpack)   | matrix type
 /// | \--minIter    | -w          | 25            | min sp2 iters
 /// | \--maxIter    | -x          | 100           | max sp2 iters
-/// | \--amp        | -a          | 1.0           | amplitude
-/// | \--alpha      | -l          | 1.0           | alpha
 /// | \--bndfil     | -b          | 0.5           | bndfil
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
-/// | \--heps       | -p          | 1.0E-16       | numeric threshold
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
 /// | \--gen        | -g          | 0             | generate H matrix if 1
 /// | \--dout       | -o          | 0             | write out density matrix if 1
@@ -90,7 +87,8 @@
 ///
 /// \param [in] argc the number of command line arguments
 /// \param [in] argv the command line arguments array
-Command parseCommandLine(int argc, char** argv)
+Command parseCommandLine(int argc, 
+                         char** argv)
 {
    Command cmd;
 
@@ -102,13 +100,15 @@ Command parseCommandLine(int argc, char** argv)
    cmd.gen = 0;
    cmd.minsp2iter = 25;
    cmd.maxsp2iter = 100;
+   cmd.nsteps = 18;
+   cmd.osteps = 0;
    cmd.debug = 0;
-   cmd.amp = 1.0;
-   cmd.alpha = 1.0;
    cmd.eps = 1.0E-05;
-   cmd.heps= 1.0E-16;
    cmd.idemTol = 1.0E-14;
    cmd.bndfil = 0.5;
+   cmd.tscale = 1.0;
+   cmd.occLimit = 1.0E-09;
+   cmd.traceLimit = 1.0E-12;
 
    int help=0;
    // add arguments for processing.  Please update the html documentation too!
@@ -119,15 +119,17 @@ Command parseCommandLine(int argc, char** argv)
    addArg("mtype",      'y', 1, 'i',  &(cmd.mtype),        0,             "matrix type (1-dense,2-ellpack)");
    addArg("minIter",    'w', 1, 'i',  &(cmd.minsp2iter),   0,             "min sp2 iters");
    addArg("maxIter",    'x', 1, 'i',  &(cmd.maxsp2iter),   0,             "max sp2 iters");
+   addArg("nsteps",     's', 1, 'i',  &(cmd.nsteps),       0,             "num sp2 iters");
+   addArg("occSteps",   'c', 1, 'i',  &(cmd.osteps),       0,             "num occ iters");
    addArg("gen",        'g', 1, 'i',  &(cmd.gen),          0,             "generate H matrix");
    addArg("dout",       'o', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
    addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
-   addArg("amp",        'a', 1, 'd',  &(cmd.amp),          0,             "amplitude");
-   addArg("alpha",      'l', 1, 'd',  &(cmd.alpha),        0,             "alpha");
    addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
    addArg("eps",        'e', 1, 'd',  &(cmd.eps),          0,             "threshold for sparse math");
-   addArg("heps",       'p', 1, 'd',  &(cmd.heps),         0,             "threshold for dense2sparse");
    addArg("idemtol",    'i', 1, 'd',  &(cmd.idemTol),      0,             "threshold for SP2 loop");
+   addArg("tscale",     't', 1, 'd',  &(cmd.tscale),       0,             "scaling factor");
+   addArg("traceLimit", 'a', 1, 'd',  &(cmd.traceLimit),   0,             "trace limit");
+   addArg("occLimit",   'r', 1, 'd',  &(cmd.occLimit),     0,             "occ err limit");
 
    processArgs(argc,argv);
 
