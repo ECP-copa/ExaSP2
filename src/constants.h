@@ -38,6 +38,7 @@ int debug_i;
 real_t eps_i; 
 real_t idemTol_i; 
 real_t bndfil_i;
+real_t beta_i;
 real_t tscale_i;
 real_t occLimit_i;
 real_t traceLimit_i;
@@ -48,16 +49,17 @@ extern int M_i;
 extern int mtype_i;
 extern int minsp2iter_i;
 extern int maxsp2iter_i;
-int nsteps_i;
-int osteps_i;
+extern int nsteps_i;
+extern int osteps_i;
 extern int debug_i;
 
 extern real_t eps_i;          
 extern real_t idemTol_i;
 extern real_t bndfil_i;
-real_t tscale_i;
-real_t occLimit_i;
-real_t traceLimit_i;
+extern real_t beta_i;
+extern real_t tscale_i;
+extern real_t occLimit_i;
+extern real_t traceLimit_i;
 #endif
 
 #endif

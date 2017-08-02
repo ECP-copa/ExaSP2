@@ -31,6 +31,7 @@
 /// | \--minIter    | -w          | 25            | min sp2 iters
 /// | \--maxIter    | -x          | 100           | max sp2 iters
 /// | \--bndfil     | -b          | 0.5           | bndfil
+/// | \--beta       | -k          | 0.0           | beta=1/KBT
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
 /// | \--gen        | -g          | 0             | generate H matrix if 1
@@ -106,6 +107,7 @@ Command parseCommandLine(int argc,
    cmd.eps = 1.0E-05;
    cmd.idemTol = 1.0E-14;
    cmd.bndfil = 0.5;
+   cmd.beta = 0.0;
    cmd.tscale = 1.0;
    cmd.occLimit = 1.0E-09;
    cmd.traceLimit = 1.0E-12;
@@ -125,6 +127,7 @@ Command parseCommandLine(int argc,
    addArg("dout",       'o', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
    addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
    addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
+   addArg("beta",       'k', 1, 'd',  &(cmd.beta),         0,             "beta=1/KBT");
    addArg("eps",        'e', 1, 'd',  &(cmd.eps),          0,             "threshold for sparse math");
    addArg("idemtol",    'i', 1, 'd',  &(cmd.idemTol),      0,             "threshold for SP2 loop");
    addArg("tscale",     't', 1, 'd',  &(cmd.tscale),       0,             "scaling factor");

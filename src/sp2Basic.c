@@ -166,7 +166,7 @@ void sp2Loop(const bml_matrix_t* h_bml,
   stopTimer(sp2LoopTimer);
 
   // Multiply by 2
-  bml_scale_inplace(TWO, rho_bml);
+  bml_scale_inplace(&TWO, rho_bml);
   
   // Report results
   reportResults(iter, rho_bml, x2_bml);

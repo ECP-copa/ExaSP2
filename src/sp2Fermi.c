@@ -35,7 +35,7 @@ void normalize(bml_matrix_t* h_bml,
   beta = hN - mu;
 
   bml_scale_add_identity(h_bml, alpha, beta, ZERO);
-  bml_scale_inplace(maxMinusMinInverse, h_bml);
+  bml_scale_inplace(&maxMinusMinInverse, h_bml);
 
 }
 
@@ -89,9 +89,10 @@ void sp2Init(const bml_matrix_t* h_bml,
     normalize(rho_bml, *h1, *hN, *mu);
     stopTimer(normTimer);
 
+    // X1 = -I/(hN-h1)
     bml_copy(i_bml, x1_bml);
-    real_t sfactor = MINUS_ONE / (hN - h1);
-    bml_scale_inplace(sfactor, x1_bml);
+    real_t sfactor = MINUS_ONE / (*hN - *h1);
+    bml_scale_inplace(&sfactor, x1_bml);
 
     for (int i = 0; i < nsteps; i++)
     {
@@ -160,7 +161,7 @@ void sp2Init(const bml_matrix_t* h_bml,
       lambda = ZERO;
 
     *mu += lambda;
-    printf("mu = %lg occErr = %lg occErrLimit = %lg\n", *mu, occErr, occErrLimit);
+    //printf("mu = %lg traceX0 = %lg occErr = %lg occErrLimit = %lg\n", *mu, traceX0, occErr, occErrLimit);
   }
 
   bml_free_memory(trace);
@@ -186,7 +187,7 @@ void sp2Init(const bml_matrix_t* h_bml,
     *beta = MINUS_THOUSAND;
 
   // X = 2 * X
-  bml_scale_inplace(TWO, rho_bml);
+  bml_scale_inplace(&TWO, rho_bml);
 
   bml_deallocate(&tmp_bml);
   bml_deallocate(&i_bml);
@@ -284,7 +285,7 @@ void sp2Loop(const bml_matrix_t* h_bml,
   stopTimer(xaddTimer);
 
   // X = 2*X
-  bml_scale_inplace(TWO, rho_bml);
+  bml_scale_inplace(&TWO, rho_bml);
 
   bml_free_memory(trace);
   bml_deallocate(&i_bml);

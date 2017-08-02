@@ -124,6 +124,7 @@ int main(int argc,
   eps_i = cmd.eps;
   idemTol_i = cmd.idemTol;
   bndfil_i = cmd.bndfil;
+  beta_i = cmd.beta;
   tscale_i = cmd.tscale;
   occLimit_i = cmd.occLimit;
   traceLimit_i = cmd.traceLimit;
@@ -136,7 +137,7 @@ int main(int argc,
     printf("nsteps = %d  osteps = %d\n", nsteps_i, osteps_i);
     printf("mtype = %d  hmatName = %s\n", cmd.mtype, cmd.hmatName);
     printf("eps = %lg  tscale = %lg\n", eps_i, tscale_i);
-    printf("idemTol = %lg  bndfil = %lg\n", idemTol_i, bndfil_i);
+    printf("idemTol = %lg  bndfil = %lg  beta = %lg\n", idemTol_i, bndfil_i, beta_i);
     printf("occLimit = %lg  traceLimit = %lg\n\n", occLimit_i, traceLimit_i);
   }
 
@@ -152,6 +153,7 @@ int main(int argc,
   // Run SP2 variant
   
   real_t nocc = bndfil_i * N_i;
+  printf("nocc = %lg\n", nocc);
 
 #ifdef SP2_BASIC
   // Perform SP2 loop
@@ -160,14 +162,14 @@ int main(int argc,
 
 #ifdef SP2_FERMI
   real_t mu = ZERO;
-  real_t beta = ZERO;
+  real_t beta = beta_i;
   int* sgnlist = bml_allocate_memory(nsteps_i*sizeof(int));
   real_t h1 = ZERO;
   real_t hN = ZERO;
   real_t kbt = ZERO;
 
   // Perform truncated SP2 Fermi initialization followed by Fermi
-  printf("sp2Init start: mu = %lg beta = %lg kbt = %lg\n", mu, beta, kbt);
+  printf("sp2Init start: mu = %lg beta = %lg \n", mu, beta);
   startTimer(sp2InitTimer);
   sp2Init(h_bml, rho_bml, nsteps_i, nocc, &mu, &beta, sgnlist, &h1, &hN,
     tscale_i, occLimit_i, traceLimit_i, eps_i); 
@@ -181,7 +183,7 @@ int main(int argc,
     osteps_i, eps_i, traceLimit_i, eps_i);
   stopTimer(sp2LoopTimer);
 
-  printf("sp2Loop complete: mu = %lg\n", mu);
+  printf("sp2Loop complete: mu = %lg beta = %lg kbt = %lg\n", mu, beta, kbt);
 
   bml_free_memory(sgnlist);
 
