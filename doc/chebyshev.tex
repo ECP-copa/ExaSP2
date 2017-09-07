@@ -3,6 +3,13 @@
   
 In this section we describe the implementation of the Chebyshev polynomial approximation to the Fermi distribution function. 
 This is performed int the \texttt{~/qmd-progress/chebyshev\_mod.F90} module of the progress library. All the matrix-matrix multiplications are done with the BML library. 
+Chebyshev polynomial approximation to the Fermi distribution can be characterized as follows: Trivial parallelization and the possibility of using sparse Matrix-Matrix multiplications (BML)
+; Potential use of common kernel that will be developed in COPA for SP2 and SP2\_Fermi. The disadvantage is that it requires several matrix-matrix multiplications depending on the electronic T. For a thorough revision of this method, see the following literature:  
+ \begin{itemize}
+    \item - Alexander Weisse, Gerhard Wellein, Andreas Alvermann, and Holger Fehske. The kernel polynomial method. \textit{Rev. Mod. Phys.}, 78:275-306, \textbf{2006}. 
+    \item - Javier Segura Amparo Gil and Nico M. Temme. Chebyshev Expansions, chapter 3. \textit{Society for Industrial Mathematics (SIAM)}, \textbf{2007}.
+    \item - R. N. Silver, H. Roeder, A. F. Voter, and J. D. Kress. Chebyshev Moment Problems: Maximum Entropy and Kernel Polynomial Methods, pages 187–194. \textit{Springer} Netherlands, Dordrecht, \textbf{1996}. 
+ \end{itemize}  
 
 The main objective of this technique is to approximate the following Fermi distribution function:
 %
@@ -87,7 +94,7 @@ Where $K_0 = n + 1$ and $K_r = (n + 1)/2$ for $1 \leq r \leq n$. Note that $(1-x
 
 \subsection{Fermi function approximation}
 
-Here we use this orthogonality relation to compute the coefficient of the Chebyshev polynimial to approximate the Fermi distribution function as follows:
+Here we use this orthogonality relation to compute the coefficient of the Chebyshev polynomial to approximate the Fermi distribution function as follows:
 
 \begin{equation}
   f_F(x) \simeq f^m_F(x) = \sum_i^m c_i T_i(x)
@@ -150,9 +157,7 @@ The function $f_F$, also have to get arguments in $[-1,1]$ for which we have to 
   \label{Fermi}
 \end{equation}
 
-Our fist attempt for an pseudocode would look like the following: 
-
-Derivative AS A FUINCTION OF MOMENTS!!!HOW DOES IT CHANGES 
+Our first attempt of a pseudocode would look like the following:  
 
 \begin{algorithm}[H]
   \algrenewcommand\algorithmicfunction{\textbf{procedure}}
@@ -214,35 +219,7 @@ Derivative AS A FUINCTION OF MOMENTS!!!HOW DOES IT CHANGES
   \caption{Pseudocode for computing the Chebyshev coefficients}
 \end{algorithm}
 
-% \State \textbf{for} $r$ = 1 : $m - 1$ \textbf{do}
-% \State \qquad \textbf{for} $j$ = 1 : 1000 \textbf{do}        
-% \State \qquad \qquad xj = cos((j+0.5_dp)*pi/(npts + 1))
-% \State \qquad \qquad x = (emax-emin)*(xj + 1.0d0)/2.0d0 + emin
-% \State \qquad \qquad Int = Int + Tr(r,xj)*fermi(x,ef,kbt)      
-% \State\qquad \textbf{end for}  
-
-The Jacson kernel gives un a higher temperatue. The problem is that we miss accuracy around the Fermi level. 
-
-\begin{itemize}
- \item Hybrid between SP2 and Cheb expansion. We tried performing Cheb first followed by SP2 and viceversa. There's no imporvement 
- compared to ``truncated'' SP2. 
- 
-\end{itemize}
-
-
-Chebyshev polynomial approximation to the Fermi distribution. Some points:
-\begin{itemize}
- \item Trivial parallelization and the possibility of using sparse Matrix-Matrix multiplications (BML)
- \item Potential use of common kernel that will be developed in COPA for SP2 and SP2\_Fermi
- \item Requires several matrix-matrix multiplications depending on the electronic T.  
-\end{itemize}
-
-  \begin{itemize}
-   \item     - Alexander Weisse, Gerhard Wellein, Andreas Alvermann, and Holger Fehske. The kernel polynomial method. \textit{Rev. Mod. Phys.}, 78:275-306, \textbf{2006}. 
-  \item     - Javier Segura Amparo Gil and Nico M. Temme. Chebyshev Expansions, chapter 3. \textit{Society for Industrial Mathematics (SIAM)}, \textbf{2007}.
-  \item - R. N. Silver, H. Roeder, A. F. Voter, and J. D. Kress. Chebyshev Moment Problems: Maximum Entropy and Kernel Polynomial Methods, pages 187–194. \textit{Springer} Netherlands, Dordrecht, \textbf{1996}. 
-  \end{itemize}  
-  
+All the operations are done with the BML library. Function GETC, gets the coefficients of the expansion. 
 
 
 The Fermi distribution function can be approximated with Chebyshev polynomials: 
@@ -270,9 +247,6 @@ where $c_i$ are the coefficients of the expansion and $T_i(x)$ are the Chebyshev
 For all the points $x$ in the domain and taking into account that $T_0 = 1$, $T_1=x$, $f^0_F(x) = c_0$ and $f^1_F(x) = c_1x + c_0$. \\
 \vspace{0.4cm}
 Note that $x$ can be a Hamiltonian matrix $\textbf{H}$.
-  \footnote{\tiny
-    - Alexander Weisse, Gerhard Wellein, Andreas Alvermann, and Holger Fehske. The kernel polynomial method. \textit{Rev. Mod. Phys.}, 78:275-306, \textbf{2006}. 
-  }
 
 
 Fermi function evaluated and approximated over the 50 CH$_4$ system spectral domain:
@@ -292,8 +266,6 @@ Any kind of oscillations can give problems when computing the total occupation.
    \end{center}  
 Oscillations around zones with ``rich states'' cause problems.
 
-
-
 It can be corrected by applying the Jackson kernel. But with disadvantage of having a lower derivative at $x = \mu$.
 \begin{equation}
        g^J_i = \frac{1}{n+1} (n - i + 1) \cos \frac{\pi i}{n+1} 
@@ -311,58 +283,6 @@ Gap resolution as a function of the number of polynomials for the 50 CH$_4$ syst
       \node (a) [xshift=0.0cm,yshift=0.0cm] {\includegraphics[width=6.0cm]{./fig/gap.pdf}};          
     \end{tikzpicture}
    \end{center}  
-
-
-\begin{algorithm}[H]
-  \algrenewcommand\algorithmicfunction{\textbf{procedure}}
-  \begin{algorithmic}
-    \parskip 0.05cm
-    {\fontsize{0.3cm}{0.3em}\selectfont 
-      \Function{CHEB}{$m$, $k_bT$, $\mu$, $\bold H$, $ \bold P$}
-      %
-      \State Estimate $\emin$ and $\emax$ from $\ham$
-      %
-      \State Compute $\alpha$ and $\beta$      
-      %
-      \State $\X = \alpha\ham + \beta \Id$
-      %
-      \State \textbf{call} \textcolor{blue}{GETC} ($k_bT,\mu,m,\alpha,\beta,\coef$) 
-      %
-      \State $\textbf{T}_0 = \Id$; $\textbf{T}_1 = \X$
-      \State $\X_0 = c_0\Id$; $\X_1 = \X_0 + c_1\textbf{T}_1 $
-      \State \textbf{for} $j$ = 1 : $m-1$ \textbf{do}
-      
-      \State \qquad \textcolor{red}{$\textbf{T} = 2\X\textbf{T}_1 - \textbf{T}_{0}$}
-      \State \qquad $\X = \X_1 + c_{n+1}\textbf{T}$
-      \State \qquad $\X_1 = \X$; $\textbf{T}_{0} = \textbf{T}_{1}$; $\textbf{T}_{1} = \textbf{T}$  
-      \State \textbf{end for}
-      %
-      \State $\pno = \X$
-      %     
-      \EndFunction
-    }       
-  \end{algorithmic}
-  \label{pcode}
-  \caption{Pseudocode for the Chebyshev kernel polynomial method.}
-\end{algorithm}
-All the operations are done with the BML library. Function GETC, gets the coefficients of the expansion. 
-
-
-
-Things we tried:
-\begin{itemize}
- \item Hybrid Chebyshev and SP2 methods. 
- \item SP2 $\longmapsto$ Cheb. We get Gibbs oscillations but the Fermi function is well approximated.
- \item Cheb $\longmapsto$ SP2. Same as the ``truncated'' SP2 (No benefit from Cheb expansion).
- \item SP2 $\longmapsto$ Cheb $\longmapsto$ SP2 $\longmapsto$. We get Gibbs osculations.   
-\end{itemize}
-Things to do:
-\begin{itemize}
- \item Better estimation of the spectral boundaries with the power method.
- \item Tests the scaling with sparse matrix-matrix algebra. 
- \item Compare efficiency with SP2.
- \item Add matrix-(rectangular matrix) multiplications at BML level.
-\end{itemize}
 
 We propose to have a linear function of the threshold, increasing linearly with the degree. 
 
@@ -393,8 +313,6 @@ We have plotted the scaling for different values of parameter $a$.
     \end{tikzpicture}
    \end{center}  
 
-
-
 We have plotted the scaling for different values of parameter $a$.
 
    \begin{center}
@@ -403,5 +321,11 @@ We have plotted the scaling for different values of parameter $a$.
     \end{tikzpicture}
    \end{center}  
 
-
+Things to do:
+\begin{itemize}
+ \item Better estimation of the spectral boundaries with the power method.
+ \item Tests the scaling with sparse matrix-matrix algebra. 
+ \item Compare efficiency with SP2.
+ \item Add matrix-(rectangular matrix) multiplications at BML level.
+\end{itemize}
 
