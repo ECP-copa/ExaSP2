@@ -5,14 +5,33 @@
 \usepackage[latin9]{inputenc}
 \usepackage{units}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \usepackage{setspace}
 \doublespacing
 \usepackage{babel}
 \usepackage{listings}
+\usepackage{smartdiagram}
+\usepackage{color}% Include colors for document elements
+\usesmartdiagramlibrary{additions}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}
 \usepackage{nicefrac}
+\usepackage{pgf}
+\usepackage{tikz}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}% Include figure files
+\usepackage{caption}
+\usepackage{dcolumn}% Align table columns on decimal point
+\usepackage{url} 
+\usepackage{bm}% bold math
+\usepackage{algorithm,algpseudocode}
+\usepackage{setspace}
+\usepackage{lmodern}
+\usepackage{verbatim}
+
+
+
 %\usepackage[margins, movemargins]{trackchanges}
 %\usepackage[footnotes]{trackchanges}
 \usepackage[inline]{trackchanges}
@@ -30,22 +49,26 @@
 \newcommand{\para}{{||}}
 \newcommand{\LL}{\mathcal{L}}
 
+\def\prog#1{\texttt{\color{green!90} #1}}  
+\def\comm#1{\texttt{\color{gray} #1}}  
+
+
 \begin{document}
 
 \title{O(N) Quantum Molecular Dynamics (QMD) Algorithms and Code Requirements}
 \author{CoPA/QMD team}
-\date{August 2017}
+\date{\today}
 
 \maketitle
 
 \section{Introduction}
-\input{introduction}
+ \input{introduction}
 
 \section{QMD program flow}
-\input{program_flow}
+ \input{program_flow}
 
 \section{Basic Matrix Library (BML)}
-\input{bml}
+ \input{bml}
 
 \section{Parallel, Rapid O(N) and Graph-based Recursive Electronic Structure Solvers (PROGRESS) Library}
 \input{progress_lib}
@@ -75,7 +98,7 @@
 \input{sp2_basic}
 
 \subsubsection{Truncated SP2 Fermi}
-\input{sp2_fermi}
+% \input{sp2_fermi}
 
 \subsubsection{Implicit Fermi}
 \input{implicit_fermi}
@@ -88,6 +111,6 @@
 
 
 \pagebreak{}\bibliographystyle{ieeetr}
-\bibliography{QMD_alg_codesign}
+\bibliography{QMD_alg_codesign,bml,dftbplus}
 
 \end{document}

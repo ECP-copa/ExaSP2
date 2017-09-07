@@ -31,12 +31,12 @@ exchange (ex. HALO).
 
 # Current Capabilities
 
-## SP2 Solvers:
+## Electronic Structure Solvers:
  * BASIC    - original SP2 algorithm for calculation of the density matrix at zero temperature (default)
  * FERMI    - truncated SP2 for finite temperature and partial occupation (future)
  * RESPONSE - quantum perturbation theory for response properties at zero and finite temperature (future)
  * KERNEL   - fast Newton solver for non-linear equations (future))
- * CHEBYSHEV- Chebyshev polynomial (future)
+ * CHEBYSHEV- Chebyshev kernel polynomial method (future)
 
 ## Data Decomposition:
  * 1-D   - chunks of rows/columns (default)
