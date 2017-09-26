@@ -128,6 +128,14 @@ MKL_ROOT = $(MKLROOT)
 INCLUDES += -I$(MKL_ROOT)/include
 LDFLAGS += -L$(MKL_ROOT)/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -ldl
 endif
+ifeq ($(BLAS), OPENBLAS)
+ifdef BLAS_ROOT
+INCLUDES += -I$(BLAS_ROOT)/include
+LDFLAGS += -L$(BLAS_ROOT)/lib
+endif
+LDFLAGS += -lopenblas
+endif
+
 endif
 
 ifeq ($(METIS), ON)
