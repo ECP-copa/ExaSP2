@@ -6,7 +6,7 @@ SHELL = /bin/bash
 # Use BML library (ON/OFF)
 BML = ON
 
-# Choose BLAS library (MKL) 
+# Choose BLAS library (MKL, OpenBLAS, GENERIC_SPACKBLAS) 
 BLAS = MKL
 
 # Use METIS library for graph partitioning (ON/OFF)
@@ -123,6 +123,7 @@ endif
 ifeq ($(BML), ON)
 INCLUDES += -I$(BML_PATH)/../include
 LDFLAGS += -L$(BML_PATH) -lbml
+endif
 ifeq ($(BLAS), MKL)
 MKL_ROOT = $(MKLROOT)
 INCLUDES += -I$(MKL_ROOT)/include
@@ -135,7 +136,11 @@ LDFLAGS += -L$(BLAS_ROOT)/lib
 endif
 LDFLAGS += -lopenblas
 endif
-
+ifeq($(BLAS), GENERIC_SPACKBLAS)
+SPACKBLASINCLUDES = 
+INCLUDES += -I$(SPACKBLASINCLUDES)
+SPACKBLASLIBFLAGS = 
+LDFLAGS += $(SPACKBLASLIBFLAGS)
 endif
 
 ifeq ($(METIS), ON)
