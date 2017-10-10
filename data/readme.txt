@@ -1,9 +1,11 @@
 data: This contains example matrices in Matrix Market Format.
 These matrices serve as input Hamiltonians to ExaSP2.
 They represent different the following.
- 1) polyethylene chains of 512 and 1024 molecules,
+ 1) polyethylene chains of 512 and 1024 molecules.
  2) nitro-methane 100 molecules, from last SCF iteration.
  3) nitro-methane 200 molecules, from last SCF iteration.
+ 4) trpcage protein solvated in water, 8352 atoms.
+ 5) alanine 19945 atoms.
 
 poly_chain.512.mtx - 512 molecules, 3072 atoms, 6144 orbitals,
 number of non-zeroes = 98304, N = 6144, M = 260.
@@ -16,6 +18,12 @@ number of non-zeroes = 730866, N = 1900, M = 1900
 
 nm.200.mtx - 200 molecules, 1400 atoms, 3800 orbitals
 number of non-zeroes = 1442828, N = 3800, M = 3800
+
+trpcage_8K.mtx - 8352 atoms, 16863 orbitals
+number of non-zeroes = 116690, N = 16863, M = 1500, BNDFIL = 0.661626 (OCC = 11157) 
+
+alanine.20k.mtx - 19945 atoms, 41185 orbitals
+number of non-zeroes = 374997, N = 41185, M = 3000, BNDFIL = 0.6498968 (OCC = 26766)
 
 Note the M values are suggested for SP2 Basic. The other variants may
 require larger values.
