@@ -63,7 +63,7 @@ exchange (ex. HALO).
 
 ## Dependencies
  * Required: C
- * Required: BML (https:/github.com/qmmd/bml)
+ * Required: BML (https://github.com/lanl/bml)
  * Required: BLAS/LAPACK (ex. MKL)
  * Optional: MPI, other libraries (per implementation choices)
 

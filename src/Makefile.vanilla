@@ -111,10 +111,10 @@ CFLAGS += -DSINGLE
 endif
 
 # Set executable name and add includes & libraries for MPI if needed.
-ExaSP2_VARIANT = ExaSP2-serial
+ExaSP2_VARIANT = ExaSP2-serial-${SP2SOLVER}
 ifeq ($(DO_MPI), ON)
 CC = mpicc
-ExaSP2_VARIANT = ExaSP2-parallel
+ExaSP2_VARIANT = ExaSP2-parallel-${SP2SOLVER}
 INCLUDES += ${MPI_INCLUDE}
 LDFLAGS += ${MPI_LIB}
 endif
