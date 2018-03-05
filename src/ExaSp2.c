@@ -11,7 +11,7 @@
 /// and is tailored for density functional based tight-binding calculations
 /// of non-metallic material systems. It is composed of a series of
 /// generalized matrix-matrix multiplications. It is created and maintained by
-/// The Co-Design Center for Particle Applincation
+/// The Co-Design Center for Particle Application
 /// (CoPA).  https://github.com/ECP-copa.  The
 /// code is intended to serve as a vehicle for co-design by allowing
 /// others to extend and/or reimplement it as needed to test performance of
