@@ -30,6 +30,7 @@
 /// | \--mtype      | -y          | 2 (ellpack)   | matrix type
 /// | \--minIter    | -w          | 25            | min sp2 iters
 /// | \--maxIter    | -x          | 100           | max sp2 iters
+/// | \--nocc       | -c          | 0.0           | number of occupied states
 /// | \--bndfil     | -b          | 0.5           | bndfil
 /// | \--beta       | -k          | 0.0           | beta=1/KBT
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
@@ -104,6 +105,7 @@ Command parseCommandLine(int argc,
    cmd.nsteps = 18;
    cmd.osteps = 0;
    cmd.debug = 0;
+   cmd.nocc = 0.0;
    cmd.eps = 1.0E-05;
    cmd.idemTol = 1.0E-14;
    cmd.bndfil = 0.5;
@@ -126,6 +128,7 @@ Command parseCommandLine(int argc,
    addArg("gen",        'g', 1, 'i',  &(cmd.gen),          0,             "generate H matrix");
    addArg("dout",       'o', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
    addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
+   addArg("nocc",       'c', 1, 'd',  &(cmd.nocc),         0,             "nocc");
    addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
    addArg("beta",       'k', 1, 'd',  &(cmd.beta),         0,             "beta=1/KBT");
    addArg("eps",        'e', 1, 'd',  &(cmd.eps),          0,             "threshold for sparse math");

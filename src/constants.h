@@ -35,6 +35,7 @@ int nsteps_i;
 int osteps_i;
 int debug_i;
 
+real_t nocc_i; 
 real_t eps_i; 
 real_t idemTol_i; 
 real_t bndfil_i;
@@ -53,6 +54,7 @@ extern int nsteps_i;
 extern int osteps_i;
 extern int debug_i;
 
+extern real_t nocc_i;          
 extern real_t eps_i;          
 extern real_t idemTol_i;
 extern real_t bndfil_i;

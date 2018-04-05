@@ -24,6 +24,7 @@ typedef struct CommandSt
    int nsteps;          //!< number of SP2 steps
    int osteps;          //!< number of occupation loop steps
 
+   real_t nocc;         //!< number of occupied states
    real_t eps;          //!< threshold for sparse math 
    real_t idemTol;      //!< threshold for SP2 loop
    real_t bndfil;       //!< band fill

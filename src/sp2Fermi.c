@@ -74,6 +74,8 @@ void sp2Init(const bml_matrix_t* h_bml,
   real_t lambda = ZERO;
   real_t occErr = ONE;
   int firstTime = 1;
+  int lcount = 0;
+  int ncount = 0;
 
   real_t* trace = bml_allocate_memory(2*sizeof(real_t));
 
@@ -84,18 +86,24 @@ void sp2Init(const bml_matrix_t* h_bml,
 
   while (occErr > occErrLimit)
   {
-    startTimer(normTimer);
+    lcount++;
+    startTimer(copyInitTimer);
     bml_copy(h_bml, rho_bml);
+    stopTimer(copyInitTimer);
+    startTimer(normInitTimer);
     normalize(rho_bml, *h1, *hN, *mu);
-    stopTimer(normTimer);
+    stopTimer(normInitTimer);
 
     // X1 = -I/(hN-h1)
+    startTimer(copyInitTimer);
     bml_copy(i_bml, x1_bml);
+    stopTimer(copyInitTimer);
     real_t sfactor = MINUS_ONE / (*hN - *h1);
     bml_scale_inplace(&sfactor, x1_bml);
 
     for (int i = 0; i < nsteps; i++)
     {
+      ncount++;
       startTimer(x2InitTimer);
       trace = bml_multiply_x2(rho_bml, x2_bml, threshold);
       stopTimer(x2InitTimer);
@@ -131,7 +139,11 @@ void sp2Init(const bml_matrix_t* h_bml,
         stopTimer(xaddInitTimer);
       }
       else
+      {
+        startTimer(copyInitTimer);
         bml_copy(tmp_bml, x1_bml);
+        stopTimer(copyInitTimer);
+      }
 
       // X0 = X0 + sgnlist(i)*(X0 - X0_2)
       // if sgnlist == 1, X0 = 2.0*X0 - X0_2
@@ -145,8 +157,11 @@ void sp2Init(const bml_matrix_t* h_bml,
         stopTimer(xaddInitTimer);
       }
       else
+      {
+        startTimer(copyInitTimer);
         bml_copy(x2_bml, rho_bml);
-
+        stopTimer(copyInitTimer);
+      }
     }
 
     firstTime = 0;
@@ -193,6 +208,8 @@ void sp2Init(const bml_matrix_t* h_bml,
   bml_deallocate(&i_bml);
   bml_deallocate(&x1_bml);
 
+  printf("lcount = %d iterations through while loop\n", lcount);
+  printf("ncount = %d iterations through nsteps loop\n", ncount);
 } 
 
 /// \details
@@ -232,8 +249,10 @@ void sp2Loop(const bml_matrix_t* h_bml,
          (osteps > 0 && iter < osteps))
   {
     iter += 1;
-    startTimer(normTimer);
+    startTimer(copyTimer);
     bml_copy(h_bml, rho_bml);
+    stopTimer(copyTimer);
+    startTimer(normTimer);
     normalize(rho_bml, h1, hN, *mu);
     stopTimer(normTimer);
 
@@ -253,14 +272,20 @@ void sp2Loop(const bml_matrix_t* h_bml,
         stopTimer(xaddTimer);
       }
       else
+      {
+        startTimer(copyTimer);
         bml_copy(x2_bml, rho_bml);
+        stopTimer(copyTimer);
+      }
     }
 
     traceX0 = bml_trace(rho_bml);
     occErr = ABS(nocc - traceX0);
 
     // DX = -beta*X0*(I-X0)
+    startTimer(copyTimer);
     bml_copy(i_bml, x2_bml);
+    stopTimer(copyTimer);
     startTimer(xaddTimer);
     bml_add(x2_bml, rho_bml, ONE, MINUS_ONE, threshold);
     stopTimer(xaddTimer);
