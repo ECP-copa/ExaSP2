@@ -1,4 +1,4 @@
-/// \file 
+/// \file
 /// SP2 main program.
 ///
 /// \mainpage ExaSp2: A Linear Algebra Electronic Structure Mini-app
@@ -7,18 +7,18 @@
 /// algorithms and workloads for a quantum molecular dynamics (QMD)
 /// electronic structure code, such as the Los Alamos Transferable
 /// Tight-binding for Energetics (LATTE) code. The algorithm is based
-/// on a recursive second-order Fermi-Operator expansion method (SP2) 
+/// on a recursive second-order Fermi-Operator expansion method (SP2)
 /// and is tailored for density functional based tight-binding calculations
-/// of non-metallic material systems. It is composed of aseries of 
+/// of non-metallic material systems. It is composed of a series of
 /// generalized matrix-matrix multiplications. It is created and maintained by
-/// The Exascale Co-Design Center for Materials in Extreme Environments
-/// (ExMatEx).  http://codesign.lanl.gov/projects/exmatex.  The
+/// The Co-Design Center for Particle Application
+/// (CoPA).  https://github.com/ECP-copa.  The
 /// code is intended to serve as a vehicle for co-design by allowing
-/// others to extend and/or reimplement it as needed to test performance of 
+/// others to extend and/or reimplement it as needed to test performance of
 /// new architectures, programming models, etc.
 ///
 /// The current version of ExaSp2 is available from:
-/// http://exmatex.github.io/ExaSp2
+/// https://github.com/ECP-copa/ExaSP2
 ///
 /// Table of Contents
 /// =================
@@ -55,7 +55,7 @@
 
 /// \details
 /// Adjust number of non-zeroes
-int nnzStart(const int hsize, 
+int nnzStart(const int hsize,
              const int msize)
 {
   int M = msize;
@@ -102,7 +102,7 @@ bml_matrix_t* initSimulation(const Command cmd)
 }
 
 
-int main(int argc, 
+int main(int argc,
          char** argv)
 {
   // Start
@@ -177,7 +177,7 @@ int main(int argc,
   sp2Init(h_bml, rho_bml, nsteps_i, nocc_i, &mu, &beta, sgnlist, &h1, &hN,
     tscale_i, occLimit_i, traceLimit_i, eps_i); 
   stopTimer(sp2InitTimer);
-  
+
   kbt = ABS(ONE / beta);
   printf("sp2Init complete: mu = %lg beta = %lg kbt = %lg\n", mu, beta, kbt);
 
@@ -266,9 +266,9 @@ int main(int argc,
 ///
 /// A performance report is printed at the end of each simulation.
 ///
-/// 
+///
 /// Counters for Rank 0
-///        Counter          Calls    Avg/Call(MB)         Total(MB)   
+///        Counter          Calls    Avg/Call(MB)         Total(MB)
 /// _________________________________________________________________
 /// reduce                    35           0.0000            0.0005
 /// send                      75           1.0479           78.5938
@@ -335,7 +335,7 @@ int main(int argc,
 /// ExaSP2 is a reference linear algebra electronic structure simulation code as used in
 /// materials science.
 ///
-/// Problem Specification 
+/// Problem Specification
 /// ======================
 ///
 /// ExaSP2 requires an input Hamiltonian matrix. A generator is included that produces
@@ -353,7 +353,7 @@ int main(int argc,
 /// value = amplitude * random[0,1] * exp(-alpha * (Ri-Rj)^2)
 ///         where (Ri - Rj) is the distance between atoms
 ///
-/// Two Hamiltonian matrix examples are given in data/ that represent polyethylene 
+/// Two Hamiltonian matrix examples are given in data/ that represent polyethylene
 /// chains of 512 and 1024 molecules. A good M value (or number of non-zeroes per
 /// row) is 256 for each.
 ///
@@ -372,7 +372,7 @@ int main(int argc,
 /// keeps the ratio of inter-processor communication (surface) to
 /// intra-processor work (volume) fixed. The amount of inter-processor
 /// work scales with the number of processors in the domain. Run increasingly
-/// larger problems over more processors, ex. size N on 1 MPI rank, 2N on 
+/// larger problems over more processors, ex. size N on 1 MPI rank, 2N on
 /// 2 MPI ranks, etc.
 ///
 ///
@@ -395,9 +395,9 @@ int main(int argc,
 /// transparent as possible.  The main program consists of initialization,
 /// the sparse SP2 loop, and end processing.
 ///
-/// The initialization initializes MPI (if requested), reads in command line options, 
-/// reads or generates the sparse Hamiltonian matrix. The SP2 loop is as follows. 
-/// 
+/// The initialization initializes MPI (if requested), reads in command line options,
+/// reads or generates the sparse Hamiltonian matrix. The SP2 loop is as follows.
+///
 /// SP2 Algorithm:
 ///
 ///   breakLoop = 0
@@ -422,13 +422,13 @@ int main(int argc,
 ///     if (limDiff > idemTol)
 ///     {
 ///       X = 2.0 * X - X2
-///       trX = 2.0 * trX - trX2    
+///       trX = 2.0 * trX - trX2
 ///     }
 ///     else
 ///     {
 ///       X = X2
 ///       trX = trX2
-///     }  
+///     }
 ///
 ///     idempErr2 = idempErr1
 ///     idempErr1 = idempErr
@@ -458,7 +458,7 @@ int main(int argc,
 /// Computation
 /// ============
 ///
-/// The computational effort of electronic structure codes is usually focused on the 
+/// The computational effort of electronic structure codes is usually focused on the
 /// density matrix build. Non-metalic systems produce sparse Hamiltonian matrices.
 /// The SP2 algorithm takes advantage of efficient sparse matrix-matrix multiplication
 /// and addition. Using the ELLPACK-R storage structure and multi-threading using
@@ -503,13 +503,13 @@ int main(int argc,
 ///
 /// http://en.wikipedia.org/wiki/Molecular_dynamics
 ///
-/// Quantum Molecular Dynamics (QMD) simulations capture the making and 
-/// breaking of covalent bonds, charge transfer between species of 
+/// Quantum Molecular Dynamics (QMD) simulations capture the making and
+/// breaking of covalent bonds, charge transfer between species of
 /// differing electronegativities, and long-range electrostatic interactions.
 /// Electronic structure of atoms and molecules is modeled explicitly.
 /// It provides the most accurate and reliable descriptions of interatomic bonding.
-/// The prohibitive computational cost has prevented widespread use. Today, 
-/// better algorithms, and multi-core and GPU implementations are important 
+/// The prohibitive computational cost has prevented widespread use. Today,
+/// better algorithms, and multi-core and GPU implementations are important
 /// paths forward.
 ///
 /// Wikipedia background on computational chemistry:
@@ -519,16 +519,16 @@ int main(int argc,
 /// References:
 ///
 /// E. H. Rubensson, A. M. N. Niklasson, 2014,
-/// Interior eigenvalues from density matrix expansions in quantum mechanical 
+/// Interior eigenvalues from density matrix expansions in quantum mechanical
 /// molecular dynamics, SIAM J. Sci. Comput. Vol. 36, No. 2, pp. B147–B170.
 ///
 /// P. Souvatzis, A. M. N. Niklasson, 2014,
-/// First principles molecular dynamics without self-consistent field 
+/// First principles molecular dynamics without self-consistent field
 /// optimization, J. Chem. Physics 140, 044117.
 ///
 /// M. J. Cawkwell, E. J. Sanville, S. M. Mniszewski, A. M. N. Niklasson, 2012,
 /// Computing the density matrix in electronic structure theory on
-/// graphics processing units, J. Chem. Theory Comput., 8, 4094−4101. 
+/// graphics processing units, J. Chem. Theory Comput., 8, 4094−4101.
 ///
 /// M. J. Cawkwell, A. M. N. Niklasson, 2012,
 /// Energy conserving, linear scaling Born-Oppenheimer molecular dynamics,
@@ -542,7 +542,7 @@ int main(int argc,
 /// Extended Born-Oppenheimer molecular dynamics,
 /// PRL 100, 123004.
 ///
-/// A. M. N. Niklasson, 2002, 
+/// A. M. N. Niklasson, 2002,
 /// Expansion algorithm for the density matrix,
 /// Phys. Rev. B 66, 155115.
 ///
