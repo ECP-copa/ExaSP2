@@ -126,9 +126,9 @@ Command parseCommandLine(int argc,
    addArg("nsteps",     's', 1, 'i',  &(cmd.nsteps),       0,             "num sp2 iters");
    addArg("occSteps",   'c', 1, 'i',  &(cmd.osteps),       0,             "num occ iters");
    addArg("gen",        'g', 1, 'i',  &(cmd.gen),          0,             "generate H matrix");
-   addArg("dout",       'o', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
+   addArg("dout",       'w', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
    addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
-   addArg("nocc",       'c', 1, 'd',  &(cmd.nocc),         0,             "nocc");
+   addArg("nocc",       'o', 1, 'd',  &(cmd.nocc),         0,             "number of occupied states");
    addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
    addArg("beta",       'k', 1, 'd',  &(cmd.beta),         0,             "beta=1/KBT");
    addArg("eps",        'e', 1, 'd',  &(cmd.eps),          0,             "threshold for sparse math");

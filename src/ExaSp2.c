@@ -152,7 +152,7 @@ int main(int argc,
   stopTimer(preTimer);
 
   // Run SP2 variant
-  if (!(nocc_i > 0.0))
+  if (nocc_i <= 0.0)
   {
     nocc_i = bndfil_i * N_i;
   }
