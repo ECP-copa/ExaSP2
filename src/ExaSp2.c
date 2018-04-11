@@ -120,6 +120,7 @@ int main(int argc,
   maxsp2iter_i = cmd.maxsp2iter;
   nsteps_i = cmd.nsteps;
   debug_i = cmd.debug;
+  dout_i = cmd.dout;
 
   nocc_i = cmd.nocc;
   eps_i = cmd.eps;
@@ -133,13 +134,14 @@ int main(int argc,
   if (bml_printRank())
   {
     printf("\nParameters:\n");
-    printf("msparse = %d  N = %d  debug = %d\n", msparse_i, N_i, debug_i);
+    printf("msparse = %d  N = %d\n", msparse_i, N_i);
     printf("minsp2iter = %d  maxsp2iter = %d\n", minsp2iter_i, maxsp2iter_i);
     printf("nsteps = %d  osteps = %d\n", nsteps_i, osteps_i);
     printf("mtype = %d  hmatName = %s\n", cmd.mtype, cmd.hmatName);
     printf("eps = %lg  tscale = %lg\n", eps_i, tscale_i);
     printf("idemTol = %lg  bndfil = %lg  beta = %lg\n", idemTol_i, bndfil_i, beta_i);
-    printf("occLimit = %lg  traceLimit = %lg\n\n", occLimit_i, traceLimit_i);
+    printf("occLimit = %lg  traceLimit = %lg\n", occLimit_i, traceLimit_i);
+    printf("debug = %d  dout = %d\n\n", debug_i, dout_i);
   }
 
   // Initialize
@@ -199,7 +201,7 @@ int main(int argc,
   printPerformanceResults(N_i, 0);
 
   /// Write out density matrix
-  if (bml_printRank() && cmd.dout == 1)
+  if (bml_printRank() && dout_i == 1)
   {
     bml_write_bml_matrix(rho_bml, "dmatrix.out.mtx");
   }

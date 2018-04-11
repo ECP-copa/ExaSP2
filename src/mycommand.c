@@ -30,13 +30,13 @@
 /// | \--mtype      | -y          | 2 (ellpack)   | matrix type
 /// | \--minIter    | -w          | 25            | min sp2 iters
 /// | \--maxIter    | -x          | 100           | max sp2 iters
-/// | \--nocc       | -c          | 0.0           | number of occupied states
+/// | \--nocc       | -o          | 0.0           | number of occupied states
 /// | \--bndfil     | -b          | 0.5           | bndfil
 /// | \--beta       | -k          | 0.0           | beta=1/KBT
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
 /// | \--gen        | -g          | 0             | generate H matrix if 1
-/// | \--dout       | -o          | 0             | write out density matrix if 1
+/// | \--dout       | -u          | 0             | write out density matrix if 1
 /// | \--dbg        | -d          | 0             | write debug messages if 1
 ///
 /// Notes: 
@@ -126,7 +126,7 @@ Command parseCommandLine(int argc,
    addArg("nsteps",     's', 1, 'i',  &(cmd.nsteps),       0,             "num sp2 iters");
    addArg("occSteps",   'c', 1, 'i',  &(cmd.osteps),       0,             "num occ iters");
    addArg("gen",        'g', 1, 'i',  &(cmd.gen),          0,             "generate H matrix");
-   addArg("dout",       'w', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
+   addArg("dout",       'u', 1, 'i',  &(cmd.dout),         0,             "write out density matrix");
    addArg("debug",      'd', 1, 'i',  &(cmd.debug),        0,             "write out debug messages");
    addArg("nocc",       'o', 1, 'd',  &(cmd.nocc),         0,             "number of occupied states");
    addArg("bndfil",     'b', 1, 'd',  &(cmd.bndfil),       0,             "bndfil");
