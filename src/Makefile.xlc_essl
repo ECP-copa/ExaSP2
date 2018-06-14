@@ -1,0 +1,177 @@
+# Makefile for ExaSP2 serial and parallel versions
+#
+
+SHELL = /bin/bash
+
+# Use BML library (ON/OFF)
+BML = ON
+
+# Choose BLAS library (MKL, IBM) 
+BLAS = IBM 
+
+# Use METIS library for graph partitioning (ON/OFF)
+METIS = OFF
+
+# double precision (ON/OFF)
+DOUBLE_PRECISION = ON
+
+# parallel (MPI/NONE)
+PARALLEL = NONE
+
+# sp2solver (BASIC/FERMI)
+SP2SOLVER = BASIC
+
+# decomposition (ROW)
+DECOMPOSITION = ROW
+
+# dataexchange (HALO)
+DATAEXCHANGE = HALO
+
+# matrix math (SPARSE/BML)
+MATRIXMATH = BML
+
+CC = xlc_r
+CFLAGS = -std=c99
+OPTFLAGS = -qsmp=omp
+INCLUDES =
+C_LIB = -lm
+
+MPI_LIB =
+MPI_INCLUDE =
+
+OTHER_LIB = -L$(ESSL_DIR)/lib64 -lesslsmp
+OTHER_INCLUDE = -I$(ESSL_DIR)/include
+
+# clear all suffixes
+.SUFFIXES:
+# list only those that we use
+.SUFFIXES: .c .o
+
+.PHONY: DEFAULT clean distclean depend
+
+BIN_DIR=../bin
+
+# Add parallel
+ifeq ($(PARALLEL), MPI)
+DO_MPI = ON
+CFLAGS += -DDO_MPI -DPARALLEL_MPI
+endif
+
+ifeq ($(PARALLEL), NONE)
+DO_MPI = OFF
+CFLAGS += -DPARALLEL_MPI
+endif
+
+# Add BML
+ifeq ($(BML), ON)
+DO_BML = ON
+CFLAGS += -DDO_BML
+BML_PATH = $(HOME)/bml/bml/install/lib64
+endif
+
+# Add METIS
+ifeq ($(METIS), ON)
+DO_METIS = ON
+CFLAGS += -DDO_METIS
+METIS_PATH = $(HOME)/bml/bml/install/lib64
+endif
+
+# Add sp2solver
+ifeq ($(SP2SOLVER), BASIC)
+CFLAGS += -DSP2_BASIC
+endif
+
+ifeq ($(SP2SOLVER), FERMI)
+CFLAGS += -DSP2_FERMI
+endif
+
+# Add decomposition
+ifeq ($(DECOMPOSITION), ROW)
+CFLAGS += -DDECOMP_ROW
+endif
+
+# Add decomposition
+ifeq ($(DATAEXCHANGE), HALO)
+CFLAGS += -DDATAEX_HALO
+endif
+
+# Add matrixmath
+# Contiguous storage and no restriction on diag element position
+ifeq ($(MATRIXMATH), SPARSE)
+CFLAGS += -DMMATH_SPARSE -DCONTIG_MATRIX -DPOSJ
+else
+CFLAGS += -DMMATH_BML
+endif
+
+# Check for double precision
+ifeq ($(DOUBLE_PRECISION), ON)
+CFLAGS += -DDOUBLE
+else
+CFLAGS += -DSINGLE
+endif
+
+# Set executable name and add includes & libraries for MPI if needed.
+ExaSP2_VARIANT = ExaSP2-serial-${SP2SOLVER}
+ifeq ($(DO_MPI), ON)
+CC = mpicc
+ExaSP2_VARIANT = ExaSP2-parallel- ${SP2SOLVER}
+INCLUDES += ${MPI_INCLUDE}
+LDFLAGS += ${MPI_LIB}
+endif
+
+# Add libraries and flags for BML, BLAS, and METIS
+ifeq ($(BML), ON)
+INCLUDES += -I$(BML_PATH)/../include
+LDFLAGS += -L$(BML_PATH) -lbml
+ifeq ($(BLAS), MKL)
+MKL_ROOT = $(MKLROOT)
+INCLUDES += -I$(MKL_ROOT)/include
+LDFLAGS += -L$(MKL_ROOT)/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -ldl
+endif
+ifeq ($(BLAS), IBM)
+ESSL_ROOT = $(ESSL_DIR)
+INCLUDES += -I$(ESSL_ROOT)/include
+LDFLAGS += -L$(ESSL_ROOT)/lib64 -lesslsmp
+endif
+endif
+
+ifeq ($(METIS), ON)
+INCLUDES += -I$(METIS_PATH)/include
+LDFLAGS += -L$(METIS_PATH)/lib -lmetis
+endif
+
+ExaSP2_EXE = ${BIN_DIR}/${ExaSP2_VARIANT}
+
+LDFLAGS += ${C_LIB} ${OTHER_LIB}
+CFLAGS  += ${OPTFLAGS} ${INCLUDES} ${OTHER_INCLUDE}
+
+SOURCES=$(wildcard *.c)
+OBJECTS=$(SOURCES:.c=.o)
+
+DEFAULT: ${ExaSP2_EXE}
+
+%.o: %.c
+	${CC} ${CFLAGS} -c $< -o $@
+
+${ExaSP2_EXE}: ${BIN_DIR} ${OBJECTS}
+	${CC} ${CFLAGS} -o ${ExaSP2_EXE} ${OBJECTS} ${LDFLAGS}
+
+${BIN_DIR}:
+	@if [ ! -d ${BIN_DIR} ]; then mkdir -p ${BIN_DIR} ; fi
+
+clean:
+	rm -f *.o .depend
+
+distclean:
+	rm -f ${ExaSP2_EXE} .depend.bak
+	rm -rf html latex
+
+.depend: ${SOURCES}
+	@touch .depend
+	@$(MAKE) --no-print-directory depend
+
+depend:
+	@echo "Rebuilding dependencies..."
+	@makedepend -f .depend -Y. --${CFLAGS}-- ${SOURCES} 2> /dev/null
+
+-include .depend

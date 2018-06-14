@@ -240,6 +240,8 @@ int waitIrecv(int rind)
   rUsed[rind] = 0;
 
   return bytesReceived;
+#else
+  return 0;
 #endif
 }
 
@@ -259,6 +261,9 @@ int testIrecv(int rind)
   }
 
   return -1;
+
+#else
+  return 0;
 #endif
 }
 
@@ -271,6 +276,9 @@ int waitIsend(int rind)
   
   rUsed[rind] = 0;
 
+  return 1;
+
+#else
   return 1;
 #endif
 }
@@ -290,6 +298,9 @@ int testIsend(int rind)
   }
 
   return -1;
+
+#else
+  return 1;
 #endif
 }
 
