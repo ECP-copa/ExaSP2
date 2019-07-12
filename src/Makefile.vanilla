@@ -18,8 +18,8 @@ DOUBLE_PRECISION = ON
 # parallel (MPI/NONE)
 PARALLEL = NONE
 
-# sp2solver (BASIC/FERMI)
-SP2SOLVER = BASIC
+# sp2solver (BASIC/FERMI/IMP)
+SP2SOLVER = IMP 
 
 # decomposition (ROW)
 DECOMPOSITION = ROW
@@ -83,6 +83,10 @@ endif
 
 ifeq ($(SP2SOLVER), FERMI)
 CFLAGS += -DSP2_FERMI
+endif
+
+ifeq ($(SP2SOLVER), IMP)
+CFLAGS += -DSP2_IMP
 endif
 
 # Add decomposition
