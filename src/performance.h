@@ -29,7 +29,10 @@ enum TimerHandle{
    reduceCommTimer,
    postTimer,
    sparse2denseTimer,
-   numberOfTimers};
+   inverseTimer,
+   nsiterTimer,
+   numberOfTimers,
+   };
 
 /// Use the startTimer and stopTimer macros for timers in code regions
 /// that may be performance sensitive.  These can be compiled away by

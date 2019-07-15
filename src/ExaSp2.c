@@ -81,7 +81,7 @@ bml_matrix_t* initSimulation(const Command cmd)
   if (bml_printRank()) printf("N = %d M = %d\n", N_i, msparse_i);
 
   // Calculate M - max number of non-zeroes per row
-  M_i = nnzStart(N_i, msparse_i);
+  M_i = nnzStart(N_i, msparse_i);  
 
   if (cmd.gen == 0)
   {
@@ -160,12 +160,19 @@ int main(int argc,
   }
   printf("nocc = %lg\n", nocc_i);
 
+#ifdef SP2_IMP
+  printf("Calling implicit algorithm\n"); 
+  implicit_recursiveLoops(h_bml, rho_bml, beta_i, nocc_i, nsteps_i, eps_i);
+#endif
+
 #ifdef SP2_BASIC
+  printf("Calling Basic\n");
   // Perform SP2 loop
   sp2Loop(h_bml, rho_bml, nocc_i, minsp2iter_i, maxsp2iter_i, idemTol_i, eps_i);
 #endif
 
 #ifdef SP2_FERMI
+  printf("Calling Fermi\n");
   real_t mu = ZERO;
   real_t beta = beta_i;
   int* sgnlist = bml_allocate_memory(nsteps_i*sizeof(int));

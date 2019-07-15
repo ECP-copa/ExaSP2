@@ -31,12 +31,13 @@ void normalize(bml_matrix_t* h_bml, const real_t cnst, const real_t mu)
 /// \details
 /// The implicit recursive expansion algorithm.
 void implicit_recursiveLoops(const bml_matrix_t* h_bml, 
-             bml_matrix_t* p_bml, 
-             const int rec_steps, 
-             const real_t linsysTol, 
+             bml_matrix_t* p_bml,
+	     const real_t beta,
+	     const real_t mu, 
+             const int rec_steps,    
              const real_t threshold)
 {
-
+  printf("Starting implicit algorithm\n");
   startTimer(sp2LoopTimer);
 
   int N = bml_get_N(h_bml);
@@ -51,6 +52,8 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
   bml_matrix_t* ai_bml = bml_zero_matrix(bml_type, precision, N, M, dmode);
   bml_matrix_t* x_bml = bml_zero_matrix(bml_type, precision, N, M, dmode);
   bml_matrix_t* a_bml = bml_zero_matrix(bml_type, precision, N, M, dmode);
+  printf("Local matrices allocated\n");  
+
 
   const real_t cnst = beta/pow(2,2+rec_steps);
   const int ns_iter = 4;
@@ -61,26 +64,45 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
   bml_copy(h_bml, p_bml);
   normalize(p_bml,cnst,mu);
   stopTimer(normTimer);
+  printf("Hamiltonian normalized\n");
   
   for (i=1; i <= rec_steps; i++) {
-
+   
+    startTimer(x2Timer);
     bml_multiply_x2(p_bml, p2_bml, threshold);
+    stopTimer(x2Timer);
     bml_copy(p2_bml, a_bml);
     bml_add(a_bml, p_bml, ONE, MINUS_ONE, threshold);
-    bml_add(a_bml, I_bml, TWO, ONE);
+    bml_add(a_bml, I_bml, TWO, ONE, threshold);
 
     if (i == 1) {
+	startTimer(inverseTimer);
     	ai_bml = bml_inverse(a_bml);
+	stopTimer(inverseTimer);
     }
     else {
+	startTimer(nsiterTimer);
 	for (j=1; j <= ns_iter; j++) {
+	
 		bml_copy(ai_bml, xtmp_bml);
 		bml_multiply(ai_bml, a_bml, x_bml, MINUS_ONE, ZERO, threshold);
 		bml_multiply(x_bml, xtmp_bml, ai_bml, ONE, TWO, threshold);
 	}
+	stopTimer(nsiterTimer);
     }
+    startTimer(mmTimer);
     bml_multiply(ai_bml, p2_bml, p_bml, ONE, ZERO, threshold);
-  }  
+    stopTimer(mmTimer);
+  }
+   
+  bml_deallocate(&ai_bml);
+  bml_deallocate(&a_bml);
+  bml_deallocate(&I_bml);
+  bml_deallocate(&p2_bml);
+  bml_deallocate(&xtmp_bml);
+  bml_deallocate(&x_bml);
+  stopTimer(sp2LoopTimer);	 
+}
  
   // Report results
  /* reportResults(iter, rho_bml, x2_bml);*/
