@@ -31,6 +31,7 @@ enum TimerHandle{
    sparse2denseTimer,
    inverseTimer,
    nsiterTimer,
+   linsyssetupTimer,
    numberOfTimers,
    };
 

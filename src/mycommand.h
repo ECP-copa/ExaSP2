@@ -29,6 +29,7 @@ typedef struct CommandSt
    real_t idemTol;      //!< threshold for SP2 loop
    real_t bndfil;       //!< band fill
    real_t tscale;       //!< scaling factor for SP2_Fermi
+   real_t mu;           //!< the chemical potential 
    real_t beta;         //!< 1/KBT
    real_t occLimit;     //!< occupation error limit
    real_t traceLimit;   //!< trace comparison limit

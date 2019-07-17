@@ -70,7 +70,8 @@ char* timerName[numberOfTimers] = {
    "  post",
    "    dense",
    "    inverse",
-   "    nsiter" 
+   "    nsiter",
+   "    linsyssetup" 
 };
 
 /// Timer data collected.  Also facilitates computing averages and
