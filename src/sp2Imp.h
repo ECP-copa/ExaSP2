@@ -22,6 +22,10 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
 void conjugateGradient(const bml_matrix_t* A_bml,
                        const bml_matrix_t* b_bml,
                        bml_matrix_t* p_bml,
+                       bml_matrix_t* r_bml,
+	               bml_matrix_t* d_bml,
+		       bml_matrix_t* wtmp_bml,
+		       bml_matrix_t* w_bml,
                        const real_t cg_tol,
                        const real_t threshold); 
 

@@ -32,6 +32,7 @@
 /// | \--maxIter    | -x          | 100           | max sp2 iters
 /// | \--nocc       | -o          | 0.0           | number of occupied states
 /// | \--bndfil     | -b          | 0.5           | bndfil
+/// | \--mu         | -p          | 0.0           | chemical potential
 /// | \--beta       | -k          | 0.0           | beta=1/KBT
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
