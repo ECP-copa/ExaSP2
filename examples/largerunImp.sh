@@ -4,4 +4,4 @@
 
 #export OMP_NUM_THREADS=1;~/ExaSP2/bin/ExaSP2-serial-IMP --hmatName ~/ExaSP2/data/poly_chain.512.mtx --N 6144 --M 3000 --beta 1 --mu 0.2 --dout 1 --nsteps 10 --eps 1e-9
 
-export OMP_NUM_THREADS=16;~/ExaSP2/bin/ExaSP2-serial-IMP --hmatName ~/ExaSP2/data/trpcage_8K.mtx --N 16863 --M 10000 --nsteps 10 --beta 0.1 --mu 0.2 --dout 1 --eps 1e-9
+export OMP_NUM_THREADS=16;~/ExaSP2/bin/ExaSP2-serial-IMP --hmatName ~/ExaSP2/data/trpcage_8K.mtx --N 16863 --M 10000 --nsteps 10 --beta 10 --mu 0.2 --dout 1 --eps 1e-9
