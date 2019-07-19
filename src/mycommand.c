@@ -32,6 +32,7 @@
 /// | \--maxIter    | -x          | 100           | max sp2 iters
 /// | \--nocc       | -o          | 0.0           | number of occupied states
 /// | \--bndfil     | -b          | 0.5           | bndfil
+/// | \--mu         | -p          | 0.0           | chemical potential
 /// | \--beta       | -k          | 0.0           | beta=1/KBT
 /// | \--eps        | -e          | 1.0E-05       | threshold for sparse math
 /// | \--idemtol    | -i          | 1.0E-14       | threshold for SP2 loop
@@ -109,6 +110,7 @@ Command parseCommandLine(int argc,
    cmd.eps = 1.0E-05;
    cmd.idemTol = 1.0E-14;
    cmd.bndfil = 0.5;
+   cmd.mu = 0.0;
    cmd.beta = 0.0;
    cmd.tscale = 1.0;
    cmd.occLimit = 1.0E-09;
@@ -136,7 +138,7 @@ Command parseCommandLine(int argc,
    addArg("tscale",     't', 1, 'd',  &(cmd.tscale),       0,             "scaling factor");
    addArg("traceLimit", 'a', 1, 'd',  &(cmd.traceLimit),   0,             "trace limit");
    addArg("occLimit",   'r', 1, 'd',  &(cmd.occLimit),     0,             "occ err limit");
-
+   addArg("mu",         'p', 1, 'd',  &(cmd.mu),           0,             "mu");
    processArgs(argc,argv);
 
    // If user didn't set hmatName, set to generate H matrix.

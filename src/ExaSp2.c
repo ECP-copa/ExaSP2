@@ -81,7 +81,7 @@ bml_matrix_t* initSimulation(const Command cmd)
   if (bml_printRank()) printf("N = %d M = %d\n", N_i, msparse_i);
 
   // Calculate M - max number of non-zeroes per row
-  M_i = nnzStart(N_i, msparse_i);
+  M_i = nnzStart(N_i, msparse_i);  
 
   if (cmd.gen == 0)
   {
@@ -126,7 +126,8 @@ int main(int argc,
   eps_i = cmd.eps;
   idemTol_i = cmd.idemTol;
   bndfil_i = cmd.bndfil;
-  beta_i = cmd.beta;
+  mu_i = cmd.mu;
+  beta_i = cmd.beta; 
   tscale_i = cmd.tscale;
   occLimit_i = cmd.occLimit;
   traceLimit_i = cmd.traceLimit;
@@ -139,7 +140,7 @@ int main(int argc,
     printf("nsteps = %d  osteps = %d\n", nsteps_i, osteps_i);
     printf("mtype = %d  hmatName = %s\n", cmd.mtype, cmd.hmatName);
     printf("eps = %lg  tscale = %lg\n", eps_i, tscale_i);
-    printf("idemTol = %lg  bndfil = %lg  beta = %lg\n", idemTol_i, bndfil_i, beta_i);
+    printf("idemTol = %lg  bndfil = %lg  beta = %lg  mu = %lg\n", idemTol_i, bndfil_i, beta_i, mu_i);
     printf("occLimit = %lg  traceLimit = %lg\n", occLimit_i, traceLimit_i);
     printf("debug = %d  dout = %d\n\n", debug_i, dout_i);
   }
@@ -160,12 +161,19 @@ int main(int argc,
   }
   printf("nocc = %lg\n", nocc_i);
 
+#ifdef SP2_IMP
+  printf("Calling Implicit Fermi\n"); 
+  implicit_recursiveLoops(h_bml, rho_bml, beta_i, mu_i, nsteps_i, eps_i);
+#endif
+
 #ifdef SP2_BASIC
+  printf("Calling Basic\n");
   // Perform SP2 loop
   sp2Loop(h_bml, rho_bml, nocc_i, minsp2iter_i, maxsp2iter_i, idemTol_i, eps_i);
 #endif
 
 #ifdef SP2_FERMI
+  printf("Calling Fermi\n");
   real_t mu = ZERO;
   real_t beta = beta_i;
   int* sgnlist = bml_allocate_memory(nsteps_i*sizeof(int));

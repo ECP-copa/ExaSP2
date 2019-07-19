@@ -12,4 +12,8 @@
 #include "sp2Fermi.h"
 #endif
 
+#ifdef SP2_IMP
+#include "sp2Imp.h"
+#endif
+
 #endif

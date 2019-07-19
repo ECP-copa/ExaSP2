@@ -6,7 +6,7 @@ SHELL = /bin/bash
 # Use BML library (ON/OFF)
 BML = ON
 
-# Choose BLAS library (MKL, OpenBLAS, GENERIC_SPACKBLAS) 
+# Choose BLAS library (MKL) 
 BLAS = MKL
 
 # Use METIS library for graph partitioning (ON/OFF)
@@ -19,7 +19,7 @@ DOUBLE_PRECISION = ON
 PARALLEL = NONE
 
 # sp2solver (BASIC/FERMI/IMP)
-SP2SOLVER = BASIC 
+SP2SOLVER = IMP
 
 # decomposition (ROW)
 DECOMPOSITION = ROW
@@ -66,14 +66,14 @@ endif
 ifeq ($(BML), ON)
 DO_BML = ON
 CFLAGS += -DDO_BML
-BML_PATH = $(HOME)/bml/bml/install/lib64
+BML_PATH = $(HOME)/bml/install/lib64
 endif
 
 # Add METIS
 ifeq ($(METIS), ON)
 DO_METIS = ON
 CFLAGS += -DDO_METIS
-METIS_PATH = $(HOME)/bml/bml/install/lib64
+METIS_PATH = $(HOME)/bml/install/lib64
 endif
 
 # Add sp2solver
@@ -118,7 +118,7 @@ endif
 ExaSP2_VARIANT = ExaSP2-serial-${SP2SOLVER}
 ifeq ($(DO_MPI), ON)
 CC = mpicc
-ExaSP2_VARIANT = ExaSP2-parallel-${SP2SOLVER}
+ExaSP2_VARIANT = ExaSP2-parallel- ${SP2SOLVER}
 INCLUDES += ${MPI_INCLUDE}
 LDFLAGS += ${MPI_LIB}
 endif
@@ -127,24 +127,11 @@ endif
 ifeq ($(BML), ON)
 INCLUDES += -I$(BML_PATH)/../include
 LDFLAGS += -L$(BML_PATH) -lbml
-endif
 ifeq ($(BLAS), MKL)
 MKL_ROOT = $(MKLROOT)
 INCLUDES += -I$(MKL_ROOT)/include
 LDFLAGS += -L$(MKL_ROOT)/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -ldl
 endif
-ifeq ($(BLAS), OPENBLAS)
-ifdef BLAS_ROOT
-INCLUDES += -I$(BLAS_ROOT)/include
-LDFLAGS += -L$(BLAS_ROOT)/lib
-endif
-LDFLAGS += -lopenblas
-endif
-ifeq ($(BLAS), GENERIC_SPACKBLAS)
-SPACKBLASINCLUDES = 
-INCLUDES += -I$(SPACKBLASINCLUDES)
-SPACKBLASLIBFLAGS = 
-LDFLAGS += $(SPACKBLASLIBFLAGS)
 endif
 
 ifeq ($(METIS), ON)

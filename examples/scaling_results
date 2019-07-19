@@ -1,0 +1,280 @@
+
+Nodes = 1  Threads = 1
+ExaSp2: SP2 Loop
+
+Parameters:
+msparse = 3000  N = 12288
+minsp2iter = 25  maxsp2iter = 100
+nsteps = 10  osteps = 0
+mtype = 2  hmatName = /home/linneamk/ExaSP2/data/poly_chain.1024.mtx
+eps = 1e-09  tscale = 1
+idemTol = 1e-14  bndfil = 0.5  beta = 4
+occLimit = 1e-09  traceLimit = 1e-12
+debug = 0  dout = 1
+
+N = 12288 M = 3000
+Adjusted M = 3008
+nocc = 0.2
+Calling implicit algorithm
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+
+Counter Statistics Across 1 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1     150.7216      150.7216      100.00
+loop                       1     150.7216      150.7216      100.00
+  pre                      1       0.1753        0.1753        0.12
+    readh                  1       0.1746        0.1746        0.12
+  sp2Loop                  1     150.5455      150.5455       99.88
+    norm                  37       0.0261        0.9673        0.64
+    x2                    10       0.3166        3.1659        2.10
+    mm                    10       0.8835        8.8345        5.86
+    inverse                1      81.6874       81.6874       54.20
+    nsiter                 9       6.1398       55.2581       36.66
+
+Timing Statistics Across 1 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                0:  150.7216       0:  150.7216    150.7216      0.0000
+loop                 0:  150.7216       0:  150.7216    150.7216      0.0000
+  pre                0:    0.1753       0:    0.1753      0.1753      0.0000
+    readh            0:    0.1746       0:    0.1746      0.1746      0.0000
+  sp2Loop            0:  150.5455       0:  150.5455    150.5455      0.0000
+    norm             0:    0.9673       0:    0.9673      0.9673      0.0000
+    x2               0:    3.1659       0:    3.1659      3.1659      0.0000
+    mm               0:    8.8345       0:    8.8345      8.8345      0.0000
+    inverse          0:   81.6874       0:   81.6874     81.6874      0.0000
+    nsiter           0:   55.2581       0:   55.2581     55.2581      0.0000
+
+Nodes = 1  Threads = 2
+ExaSp2: SP2 Loop
+
+Parameters:
+msparse = 3000  N = 12288
+minsp2iter = 25  maxsp2iter = 100
+nsteps = 10  osteps = 0
+mtype = 2  hmatName = /home/linneamk/ExaSP2/data/poly_chain.1024.mtx
+eps = 1e-09  tscale = 1
+idemTol = 1e-14  bndfil = 0.5  beta = 4
+occLimit = 1e-09  traceLimit = 1e-12
+debug = 0  dout = 1
+
+N = 12288 M = 3000
+Adjusted M = 3008
+nocc = 0.2
+Calling implicit algorithm
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+
+Counter Statistics Across 1 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1      80.4144       80.4144      100.00
+loop                       1      80.4144       80.4144      100.00
+  pre                      1       0.1748        0.1748        0.22
+    readh                  1       0.1737        0.1737        0.22
+  sp2Loop                  1      80.2390       80.2390       99.78
+    norm                  37       0.0145        0.5379        0.67
+    x2                    10       0.1610        1.6100        2.00
+    mm                    10       0.4404        4.4040        5.48
+    inverse                1      45.8143       45.8143       56.97
+    nsiter                 9       3.0622       27.5598       34.27
+
+Timing Statistics Across 1 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                0:   80.4144       0:   80.4144     80.4144      0.0000
+loop                 0:   80.4144       0:   80.4144     80.4144      0.0000
+  pre                0:    0.1748       0:    0.1748      0.1748      0.0000
+    readh            0:    0.1737       0:    0.1737      0.1737      0.0000
+  sp2Loop            0:   80.2390       0:   80.2390     80.2390      0.0000
+    norm             0:    0.5379       0:    0.5379      0.5379      0.0000
+    x2               0:    1.6100       0:    1.6100      1.6100      0.0000
+    mm               0:    4.4040       0:    4.4040      4.4040      0.0000
+    inverse          0:   45.8143       0:   45.8143     45.8143      0.0000
+    nsiter           0:   27.5598       0:   27.5598     27.5598      0.0000
+
+Nodes = 1  Threads = 4
+ExaSp2: SP2 Loop
+
+Parameters:
+msparse = 3000  N = 12288
+minsp2iter = 25  maxsp2iter = 100
+nsteps = 10  osteps = 0
+mtype = 2  hmatName = /home/linneamk/ExaSP2/data/poly_chain.1024.mtx
+eps = 1e-09  tscale = 1
+idemTol = 1e-14  bndfil = 0.5  beta = 4
+occLimit = 1e-09  traceLimit = 1e-12
+debug = 0  dout = 1
+
+N = 12288 M = 3000
+Adjusted M = 3008
+nocc = 0.2
+Calling implicit algorithm
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+
+Counter Statistics Across 1 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1      43.3401       43.3401      100.00
+loop                       1      43.3401       43.3401      100.00
+  pre                      1       0.1727        0.1727        0.40
+    readh                  1       0.1715        0.1715        0.40
+  sp2Loop                  1      43.1669       43.1669       99.60
+    norm                  37       0.0079        0.2911        0.67
+    x2                    10       0.0857        0.8573        1.98
+    mm                    10       0.2316        2.3162        5.34
+    inverse                1      25.0842       25.0842       57.88
+    nsiter                 9       1.5971       14.3736       33.16
+
+Timing Statistics Across 1 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                0:   43.3401       0:   43.3401     43.3401      0.0000
+loop                 0:   43.3401       0:   43.3401     43.3401      0.0000
+  pre                0:    0.1727       0:    0.1727      0.1727      0.0000
+    readh            0:    0.1715       0:    0.1715      0.1715      0.0000
+  sp2Loop            0:   43.1669       0:   43.1669     43.1669      0.0000
+    norm             0:    0.2911       0:    0.2911      0.2911      0.0000
+    x2               0:    0.8573       0:    0.8573      0.8573      0.0000
+    mm               0:    2.3162       0:    2.3162      2.3162      0.0000
+    inverse          0:   25.0842       0:   25.0842     25.0842      0.0000
+    nsiter           0:   14.3736       0:   14.3736     14.3736      0.0000
+
+Nodes = 1  Threads = 8
+ExaSp2: SP2 Loop
+
+Parameters:
+msparse = 3000  N = 12288
+minsp2iter = 25  maxsp2iter = 100
+nsteps = 10  osteps = 0
+mtype = 2  hmatName = /home/linneamk/ExaSP2/data/poly_chain.1024.mtx
+eps = 1e-09  tscale = 1
+idemTol = 1e-14  bndfil = 0.5  beta = 4
+occLimit = 1e-09  traceLimit = 1e-12
+debug = 0  dout = 1
+
+N = 12288 M = 3000
+Adjusted M = 3008
+nocc = 0.2
+Calling implicit algorithm
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+
+Counter Statistics Across 1 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1      25.2639       25.2639      100.00
+loop                       1      25.2639       25.2639      100.00
+  pre                      1       0.1795        0.1795        0.71
+    readh                  1       0.1783        0.1783        0.71
+  sp2Loop                  1      25.0837       25.0837       99.29
+    norm                  37       0.0045        0.1682        0.67
+    x2                    10       0.0485        0.4847        1.92
+    mm                    10       0.1273        1.2730        5.04
+    inverse                1      14.9566       14.9566       59.20
+    nsiter                 9       0.8933        8.0396       31.82
+
+Timing Statistics Across 1 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                0:   25.2639       0:   25.2639     25.2639      0.0000
+loop                 0:   25.2639       0:   25.2639     25.2639      0.0000
+  pre                0:    0.1795       0:    0.1795      0.1795      0.0000
+    readh            0:    0.1783       0:    0.1783      0.1783      0.0000
+  sp2Loop            0:   25.0837       0:   25.0837     25.0837      0.0000
+    norm             0:    0.1682       0:    0.1682      0.1682      0.0000
+    x2               0:    0.4847       0:    0.4847      0.4847      0.0000
+    mm               0:    1.2730       0:    1.2730      1.2730      0.0000
+    inverse          0:   14.9566       0:   14.9566     14.9566      0.0000
+    nsiter           0:    8.0396       0:    8.0396      8.0396      0.0000
+
+Nodes = 1  Threads = 16
+ExaSp2: SP2 Loop
+
+Parameters:
+msparse = 3000  N = 12288
+minsp2iter = 25  maxsp2iter = 100
+nsteps = 10  osteps = 0
+mtype = 2  hmatName = /home/linneamk/ExaSP2/data/poly_chain.1024.mtx
+eps = 1e-09  tscale = 1
+idemTol = 1e-14  bndfil = 0.5  beta = 4
+occLimit = 1e-09  traceLimit = 1e-12
+debug = 0  dout = 1
+
+N = 12288 M = 3000
+Adjusted M = 3008
+nocc = 0.2
+Calling implicit algorithm
+
+
+Counters for Rank 0
+       Counter          Calls    Avg/Call(MB)         Total(MB)   
+_________________________________________________________________
+
+Counter Statistics Across 1 Ranks:
+        Counter      Rank: Min(MB)        Rank: Max(MB)       Avg(MB)      Stdev(MB)
+_______________________________________________________________________________________
+
+
+Timings for Rank 0
+        Timer        # Calls    Avg/Call (s)   Total (s)    % Loop
+___________________________________________________________________
+total                      1      16.3897       16.3897      100.00
+loop                       1      16.3897       16.3897      100.00
+  pre                      1       0.1785        0.1785        1.09
+    readh                  1       0.1773        0.1773        1.08
+  sp2Loop                  1      16.2104       16.2104       98.91
+    norm                  37       0.0028        0.1020        0.62
+    x2                    10       0.0276        0.2764        1.69
+    mm                    10       0.0731        0.7315        4.46
+    inverse                1      10.2115       10.2115       62.30
+    nsiter                 9       0.5324        4.7918       29.24
+
+Timing Statistics Across 1 Ranks:
+        Timer        Rank: Min(s)       Rank: Max(s)      Avg(s)    Stdev(s)
+_____________________________________________________________________________
+total                0:   16.3897       0:   16.3897     16.3897      0.0000
+loop                 0:   16.3897       0:   16.3897     16.3897      0.0000
+  pre                0:    0.1785       0:    0.1785      0.1785      0.0000
+    readh            0:    0.1773       0:    0.1773      0.1773      0.0000
+  sp2Loop            0:   16.2104       0:   16.2104     16.2104      0.0000
+    norm             0:    0.1020       0:    0.1020      0.1020      0.0000
+    x2               0:    0.2764       0:    0.2764      0.2764      0.0000
+    mm               0:    0.7315       0:    0.7315      0.7315      0.0000
+    inverse          0:   10.2115       0:   10.2115     10.2115      0.0000
+    nsiter           0:    4.7918       0:    4.7918      4.7918      0.0000

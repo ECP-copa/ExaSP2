@@ -68,7 +68,10 @@ char* timerName[numberOfTimers] = {
    "    exchange",
    "    reduceComm",
    "  post",
-   "    dense" 
+   "    dense",
+   "    inverse",
+   "    nsiter",
+   "    linsyssetup" 
 };
 
 /// Timer data collected.  Also facilitates computing averages and
