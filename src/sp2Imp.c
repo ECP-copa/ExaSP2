@@ -71,21 +71,6 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
   bml_copy(h_bml, p_bml);
   normalize(p_bml, cnst, mu);
 
-  // Do direct expansion
-  if (method == 2) {
-   
-    bml_copy(p_bml, x_bml);
-    bml_copy(p_bml, a_bml);
-    bml_scale_add_identity(a_bml, MINUS_ONE, ONE, threshold);
-    exp_by_squaring(a_bml, p2_bml, exp_order, threshold);
-    exp_by_squaring(x_bml, p2_bml, exp_order, threshold);
-    bml_add(a_bml, x_bml, ONE, ONE, threshold);
-    conjugateGradient(a_bml, x_bml, p_bml, p2_bml, xtmp_bml, cg_tol, threshold);
-  
-  }
-  
-  // Do recursive expansion
-  else {
 
      for (i=1; i <= rec_steps; i++) {
     
@@ -104,7 +89,7 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
 		   j = 1;
 		   norm = 1.0;
 		   // Find inverse with Newton-Schulz iteration
-		   while(norm > 0.1)    {
+		   while(norm > 0.01)    {
 			   // First time use Conjugate Gradient for inverse starting guess 
 			   if (i == 1 && j == 1) { 
 				   startTimer(inverseTimer);
@@ -127,7 +112,7 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
 	       conjugateGradient(a_bml, p2_bml, p_bml, x_bml, xtmp_bml, cg_tol, threshold);
 	}
      }
-  } 
+   
  // bml_print_bml_matrix(p_bml, 0, 10, 0, 10);
   bml_deallocate(&a_bml);
   bml_deallocate(&p2_bml);
@@ -140,23 +125,6 @@ void implicit_recursiveLoops(const bml_matrix_t* h_bml,
   stopTimer(sp2LoopTimer);	 
 }
  
-  // Report results
- /* reportResults(iter, rho_bml, x2_bml);*/
-
-void exp_by_squaring(bml_matrix_t* x_bml, 
-		     bml_matrix_t* x2_bml,
-		     const int exp_order,
-                     const real_t threshold) {
-
-  int k = exp_order;
-
-  while (k > 1) {
-    bml_multiply_x2(x_bml, x2_bml, threshold);
-    printf("%d\n",k);
-    k = k/2;
-    bml_copy(x2_bml, x_bml);
-  }
-}
 
 
 void conjugateGradient(const bml_matrix_t* A_bml, 
@@ -192,7 +160,7 @@ void conjugateGradient(const bml_matrix_t* A_bml,
     startTimer(mmTimer);
     bml_multiply_AB(A_bml, d_bml, wtmp_bml, threshold);
     stopTimer(mmTimer);
-    alpha = r_norm_new/bml_traceMult(d_bml, wtmp_bml);
+    alpha = r_norm_new/bml_trace_mult(d_bml, wtmp_bml);
     bml_add(p_bml, d_bml, ONE, alpha, threshold);
     bml_add(p2_bml, wtmp_bml, ONE, -alpha, threshold);
     r_norm_old = r_norm_new;
