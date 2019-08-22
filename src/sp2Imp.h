@@ -27,10 +27,6 @@ void conjugateGradient(const bml_matrix_t* A_bml,
                        const real_t cg_tol,
                        const real_t threshold); 
 
-void exp_by_squaring(bml_matrix_t* x, 
-		     bml_matrix_t* x2, 
-                     const int exp_order, 
-                     const real_t threshold);
 
 
 void reportResults(const int iter,
